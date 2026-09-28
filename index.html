@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a1730" />
+  <meta name="description" content="HMH Finance System — finance command center for HMH Group." />
+  <title>HMH Finance System</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a1730'/%3E%3Cpath d='M14 14h8v14h20V14h8v36h-8V36H22v14h-8z' fill='%23f3c744'/%3E%3C/svg%3E" />
+  <style>
+:root{--bg:#f3f5f8;--surface:#fff;--surface-2:#f8f9fb;--surface-3:#eef1f5;--text:#0b1730;--text-2:#526079;--text-3:#8a94a6;--border:#dfe4ec;--navy:#0a1730;--navy-2:#132749;--yellow:#f3c744;--yellow-2:#ffd966;--green:#42aa7e;--red:#d65e63;--blue:#2f6fed;--shadow:0 18px 50px rgba(13,25,49,.07);--sidebar:260px;--radius:18px;color-scheme:light;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}html[data-theme=dark]{--bg:#07111f;--surface:#0c192b;--surface-2:#0f2035;--surface-3:#13263e;--text:#f4f6fb;--text-2:#aab5c6;--text-3:#77849a;--border:#21344f;--navy:#09162a;--navy-2:#122847;--yellow:#f4ca4a;--yellow-2:#ffdd76;--green:#50bd91;--red:#eb7278;--blue:#4a84f8;--shadow:0 18px 60px rgba(0,0,0,.24);color-scheme:dark}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text)}button,input,select,textarea{font:inherit}button{cursor:pointer}svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.app-shell{display:flex;min-height:100vh}.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar);background:var(--navy);color:#fff;display:flex;flex-direction:column;padding:22px 16px 14px;z-index:50;border-right:1px solid rgba(255,255,255,.04)}.brand{display:flex;align-items:center;gap:12px;padding:0 8px 18px}.brand-mark{width:46px;height:46px;border-radius:14px;background:var(--yellow);color:#0b1730;display:flex;align-items:center;justify-content:center;font-weight:900;letter-spacing:-1px}.brand-mark.small{width:36px;height:36px;border-radius:10px;font-size:13px}.brand-copy{display:flex;flex-direction:column}.brand-copy strong{font-size:16px;letter-spacing:.08em}.brand-copy span{font-size:11px;color:#93a2bb;margin-top:2px}.workspace-card{margin:0 4px 18px;padding:13px 14px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border-radius:14px;display:flex;flex-direction:column}.workspace-label{font-size:9px;letter-spacing:.14em;color:#73829b;font-weight:800}.workspace-card strong{font-size:13px;margin-top:5px}.workspace-card span:last-child{font-size:11px;color:#9eabc0;margin-top:2px}.nav-section{display:flex;flex-direction:column;gap:4px;margin-bottom:18px}.nav-title{font-size:9px;letter-spacing:.16em;color:#6f7d95;font-weight:800;padding:0 12px 6px}.nav-item{display:flex;align-items:center;gap:11px;background:transparent;border:0;color:#a9b4c8;border-radius:12px;padding:10px 12px;text-align:left;font-size:13px;font-weight:600;transition:.18s ease}.nav-item:hover{background:rgba(255,255,255,.055);color:#fff}.nav-item.active{color:#0b1730;background:var(--yellow);box-shadow:0 6px 20px rgba(243,199,68,.16)}.nav-item.active svg{color:#0b1730}.nav-item svg{color:#8492a8;width:17px;height:17px}.nav-item span{flex:1}.sidebar-spacer{flex:1}.nav-bottom{margin-bottom:8px}.sidebar-footer{display:flex;align-items:center;gap:8px;padding:12px;color:#6f7d95;font-size:10px}.secure-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(66,170,126,.1)}.main-content{margin-left:var(--sidebar);width:calc(100% - var(--sidebar));min-height:100vh}.topbar{height:84px;padding:18px 34px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(16px);position:sticky;top:0;z-index:20}.topbar-left{display:flex;align-items:center;gap:12px}.eyebrow,.section-kicker{font-size:9px;letter-spacing:.14em;font-weight:800;color:var(--text-3)}.topbar h1{font-size:23px;margin:3px 0 0;letter-spacing:-.03em}.topbar-actions{display:flex;align-items:center;gap:10px}.period-control{height:40px;display:flex;align-items:center;gap:7px;padding:0 11px;border:1px solid var(--border);background:var(--surface);border-radius:12px;color:var(--text-2)}.period-control select{border:0;outline:0;background:transparent;color:var(--text);font-size:12px;font-weight:700}.icon-button{height:40px;min-width:40px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:.18s}.icon-button:hover{border-color:color-mix(in srgb,var(--yellow) 50%,var(--border));color:var(--text)}.icon-button.subtle{background:transparent}.user-chip{border:0;background:transparent;display:flex;align-items:center;gap:9px;padding:3px 2px 3px 6px;color:var(--text);min-width:170px}.avatar{width:36px;height:36px;border-radius:11px;background:var(--navy);color:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900}.user-chip-copy{display:flex;flex-direction:column;text-align:left}.user-chip-copy strong{font-size:12px}.user-chip-copy span{font-size:10px;color:var(--text-3);margin-top:2px}.user-chip svg{margin-left:auto;width:16px}.page-container{padding:30px 34px 46px;max-width:1700px;margin:0 auto}.hero-row,.page-intro{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:24px}.hero-row h2,.page-intro h2{font-size:30px;letter-spacing:-.04em;margin:4px 0 7px}.hero-row p,.page-intro p{margin:0;color:var(--text-2);font-size:13px;max-width:720px;line-height:1.6}.hero-actions,.page-actions{display:flex;gap:9px}.btn{border:1px solid var(--border);border-radius:12px;height:42px;padding:0 15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:12px;font-weight:800}.btn-primary{background:var(--yellow);color:#0b1730;border-color:var(--yellow)}.btn-primary:hover{background:var(--yellow-2)}.btn-secondary{background:var(--surface);color:var(--text)}.btn-secondary:hover{border-color:var(--text-3)}.text-button{border:0;background:transparent;color:var(--text-2);display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;padding:3px}.text-button:hover{color:var(--text)}.text-button svg{width:14px}.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:18px}.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}.kpi-top{display:flex;align-items:center;justify-content:space-between}.kpi-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--surface-3);color:var(--yellow)}.kpi-icon svg{width:17px}.kpi-tag{font-size:9px;font-weight:800;letter-spacing:.1em;color:var(--text-3)}.kpi-label{display:block;font-size:10px;color:var(--text-3);font-weight:700;margin-top:17px}.kpi-value{display:block;font-size:24px;letter-spacing:-.04em;margin-top:5px}.kpi-bottom{margin-top:13px;font-size:10px}.kpi-indicator{color:var(--text-3)}.grid-2-1{display:grid;grid-template-columns:minmax(0,2fr) minmax(300px,1fr);gap:18px;margin-bottom:18px}.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}.panel-chart{min-height:350px}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:20px 20px 15px}.panel-head h3{margin:4px 0 0;font-size:16px;letter-spacing:-.02em}.panel-note{font-size:10px;color:var(--text-3)}.chart-summary{display:flex;flex-direction:column;text-align:right}.chart-summary strong{font-size:20px}.chart-summary span{font-size:10px;color:var(--text-3);margin-top:2px}.chart-svg{width:100%;display:block;padding:0 14px 6px}.chart-grid{stroke:var(--border);stroke-width:1;stroke-dasharray:3 5}.chart-label{fill:var(--text-3);font-size:10px}.chart-legend-inline{display:flex;gap:16px;padding:0 20px 18px;color:var(--text-2);font-size:10px}.line-swatch{display:inline-block;width:18px;height:3px;border-radius:2px;background:var(--yellow);vertical-align:middle;margin-right:5px}.line-swatch.muted{background:var(--border)}.chart-legend-inline small{color:var(--text-3)}.donut-wrap{display:grid;grid-template-columns:145px 1fr;align-items:center;gap:8px;padding:2px 20px 22px}.donut{width:150px;height:150px;transform:rotate(-90deg)}.donut text{transform:rotate(90deg);transform-origin:80px 80px}.donut-total{fill:var(--text);font-size:22px;font-weight:900}.donut-label{fill:var(--text-3);font-size:8px}.legend{display:flex;flex-direction:column;gap:12px}.legend-item{display:grid;grid-template-columns:12px 1fr auto;gap:8px;align-items:center;font-size:10px;color:var(--text-2)}.legend-item strong{color:var(--text)}.legend-dot{width:8px;height:8px;border-radius:50%}.table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse;min-width:760px}.table-wrap th,.table-wrap td{padding:13px 18px;border-top:1px solid var(--border);font-size:11px;text-align:left;white-space:nowrap}.table-wrap th{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);font-weight:800;background:var(--surface-2)}.table-wrap td small{display:block;color:var(--text-3);font-size:9px;margin-top:3px}.right{text-align:right!important}.money{font-weight:800}.money-in{color:var(--green)}.money-out{color:var(--red)}.muted-text{color:var(--text-3);font-weight:600}.danger-text{color:var(--red)!important}.flow{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:800}.flow.in{color:var(--green)}.flow.out{color:var(--red)}.flow svg{width:13px}.badge{display:inline-flex;align-items:center;justify-content:center;padding:5px 8px;border-radius:999px;font-size:9px;font-weight:900}.badge.success{background:rgba(66,170,126,.12);color:var(--green)}.badge.info{background:rgba(47,111,237,.12);color:var(--blue)}.badge.warning{background:rgba(243,199,68,.15);color:#b18a0a}.badge.danger{background:rgba(214,94,99,.12);color:var(--red)}.badge.muted{background:var(--surface-3);color:var(--text-2)}.mini-list{padding:4px 20px 18px}.mini-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid var(--border)}.mini-row:last-child{border-bottom:0}.mini-row>div:first-child{min-width:0}.mini-row strong{display:block;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mini-row small{display:block;color:var(--text-3);font-size:9px;margin-top:3px}.mini-row-right{text-align:right}.mini-row-right strong{color:var(--text)}.mini-row-right span{font-size:9px;color:var(--green);font-weight:800}.summary-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}.summary-strip>div{background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:15px 17px}.summary-strip span{display:block;color:var(--text-3);font-size:9px;font-weight:700}.summary-strip strong{display:block;font-size:17px;margin-top:6px}.page-intro{align-items:flex-end}.table-toolbar{display:flex;align-items:center;gap:8px}.search-box{height:38px;min-width:230px;border:1px solid var(--border);background:var(--surface-2);border-radius:11px;display:flex;align-items:center;gap:7px;padding:0 10px;color:var(--text-3)}.search-box input{background:transparent;border:0;outline:0;width:100%;font-size:11px;color:var(--text)}.filter-text{font-size:10px}.row-action{border:0;background:transparent;color:var(--text-3);width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center}.row-action:hover{background:var(--surface-3);color:var(--text)}.account-list{padding:0 20px 20px}.account-row{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid var(--border)}.account-row:last-child{border-bottom:0}.account-avatar{width:38px;height:38px;border-radius:11px;background:var(--surface-3);color:var(--text-2);font-size:8px;font-weight:900;display:flex;align-items:center;justify-content:center;letter-spacing:.05em}.account-row strong{font-size:11px}.account-row small{display:block;font-size:9px;color:var(--text-3);margin-top:3px}.margin-pill{font-size:9px;font-weight:900;padding:5px 7px;border-radius:8px}.margin-pill.high{background:rgba(66,170,126,.12);color:var(--green)}.margin-pill.mid{background:rgba(243,199,68,.14);color:#b18a0a}.margin-pill.low{background:rgba(214,94,99,.12);color:var(--red)}.report-tabs{display:flex;gap:5px;border-bottom:1px solid var(--border);margin-bottom:18px}.report-tab{border:0;border-bottom:2px solid transparent;background:transparent;color:var(--text-3);font-size:11px;font-weight:900;padding:11px 15px}.report-tab.active{color:var(--text);border-color:var(--yellow)}.report-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(300px,.8fr);gap:18px}.report-sheet{padding:25px}.report-brand{display:flex;gap:11px;align-items:center}.report-brand strong{display:block;font-size:13px}.report-brand span{display:block;color:var(--text-3);font-size:9px;margin-top:3px}.report-meta{font-size:10px;color:var(--text-3);margin:18px 0 12px}.report-lines{border-top:1px solid var(--border)}.report-line{display:grid;grid-template-columns:1fr auto;padding:11px 0;border-bottom:1px solid var(--border);font-size:11px}.report-line.section{font-weight:800}.report-line.total{font-weight:900}.report-line.highlight{background:rgba(243,199,68,.09);margin:0 -12px;padding-left:12px;padding-right:12px}.ratio-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px 20px}.ratio-grid>div{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:13px}.ratio-grid span{display:block;color:var(--text-3);font-size:9px}.ratio-grid strong{display:block;font-size:18px;margin-top:4px}.report-callout{margin:0 20px 20px;border-left:3px solid var(--yellow);background:var(--surface-2);padding:14px 15px;display:flex;flex-direction:column;gap:5px}.report-callout strong{font-size:10px}.report-callout span{font-size:10px;color:var(--text-2);line-height:1.6}.management-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.management-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px}.management-card span{font-size:10px;color:var(--text-3)}.management-card strong{display:block;font-size:22px;margin-top:5px}.management-card small{font-size:9px;color:var(--text-3);display:block;margin-top:4px}.focus-list{padding:3px 20px 20px}.focus-list>div{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}.focus-list>div:last-child{border-bottom:0}.focus-dot{width:9px;height:9px;border-radius:50%;margin-top:4px}.focus-dot.warning{background:var(--red)}.focus-dot.yellow{background:var(--yellow)}.focus-dot.blue{background:var(--blue)}.focus-list strong{font-size:11px}.focus-list p{font-size:10px;color:var(--text-2);margin:4px 0 0;line-height:1.5}.settings-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;padding:0 20px 20px}.form-grid label{display:flex;flex-direction:column;gap:6px}.form-grid label>span{font-size:10px;font-weight:800;color:var(--text-2)}.form-grid input,.form-grid select,.form-grid textarea{border:1px solid var(--border);background:var(--surface-2);color:var(--text);border-radius:11px;outline:0;padding:10px 11px;font-size:11px}.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus{border-color:var(--yellow)}.form-actions{grid-column:1/-1;display:flex;justify-content:flex-end;margin-top:4px}.settings-actions{padding:3px 20px 20px}.setting-action{width:100%;display:grid;grid-template-columns:38px 1fr 18px;gap:11px;align-items:center;border:0;background:transparent;text-align:left;padding:12px 0;border-bottom:1px solid var(--border);color:var(--text)}.setting-action:last-child{border-bottom:0}.setting-action:hover{background:var(--surface-2)}.setting-icon{width:36px;height:36px;background:var(--surface-3);border-radius:11px;display:flex;align-items:center;justify-content:center}.setting-action strong{font-size:11px}.setting-action small{display:block;color:var(--text-3);font-size:9px;line-height:1.4;margin-top:3px}.setting-action.danger strong{color:var(--red)}.security-note{margin:0 20px 20px;padding:14px;background:rgba(47,111,237,.08);border:1px solid rgba(47,111,237,.18);border-radius:14px;display:grid;grid-template-columns:34px 1fr;gap:10px}.security-icon{width:34px;height:34px;border-radius:10px;background:rgba(47,111,237,.12);display:flex;align-items:center;justify-content:center;color:var(--blue)}.security-note strong{font-size:10px}.security-note p{font-size:9px;line-height:1.6;color:var(--text-2);margin:4px 0 0}.empty-state{min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--text-3);text-align:center}.empty-icon{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--surface-3);color:var(--yellow)}.empty-state strong{font-size:11px;color:var(--text)}.empty-state span{font-size:9px;max-width:280px;line-height:1.5}.modal-backdrop{position:fixed;inset:0;background:rgba(3,9,19,.56);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100}.modal{width:min(760px,100%);max-height:92vh;overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:0 40px 100px rgba(0,0,0,.35)}.modal-head{display:flex;align-items:flex-start;justify-content:space-between;padding:20px 20px 8px}.modal-head h3{margin:4px 0 0;font-size:18px}.modal-actions{grid-column:1/-1;display:flex;justify-content:flex-end;gap:8px;margin-top:6px}.toast-container{position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;gap:8px;z-index:200}.toast{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);padding:12px 14px;border-radius:12px;font-size:10px;font-weight:700;animation:toastIn .18s ease-out}.toast.hide{opacity:0;transform:translateY(5px);transition:.25s}.toast-dot{width:7px;height:7px;border-radius:50%;background:var(--yellow)}.toast.success .toast-dot{background:var(--green)}.toast.danger .toast-dot{background:var(--red)}.toast.warning .toast-dot{background:var(--yellow)}.mobile-only{display:none}.mobile-overlay{display:none}.big-metric{padding:6px 20px 20px;font-size:28px;font-weight:900;letter-spacing:-.04em}.big-metric span{display:block;color:var(--text-3);font-size:9px;font-weight:700;margin-top:3px;letter-spacing:0}.donut-wrap svg circle{vector-effect:non-scaling-stroke}@keyframes toastIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(max-width:1250px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.kpi-card:last-child{grid-column:span 1}.grid-2-1,.report-grid,.settings-grid{grid-template-columns:1fr}.management-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){:root{--sidebar:260px}.sidebar{transform:translateX(-100%);transition:.25s;box-shadow:30px 0 70px rgba(0,0,0,.25)}.sidebar.open{transform:translateX(0)}.main-content{margin-left:0;width:100%}.mobile-only{display:inline-flex}.mobile-overlay.show{display:block;position:fixed;inset:0;background:rgba(3,9,19,.42);z-index:40}.topbar{padding:15px 18px}.page-container{padding:22px 18px 40px}.topbar-actions .user-chip{display:none}.hero-row,.page-intro{align-items:flex-start;flex-direction:column}.hero-actions,.page-actions{width:100%}.hero-actions .btn,.page-actions .btn{flex:1}.summary-strip{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.management-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.topbar{height:auto;min-height:76px}.period-control{display:none}.hero-row h2,.page-intro h2{font-size:24px}.kpi-grid{grid-template-columns:1fr 1fr}.kpi-value{font-size:20px}.grid-2-1{grid-template-columns:1fr}.summary-strip{grid-template-columns:1fr}.management-grid{grid-template-columns:1fr}.search-box{min-width:0;flex:1}.table-toolbar{width:100%}.panel-head{align-items:flex-start;flex-direction:column}.panel-head .table-toolbar{align-items:stretch}.donut-wrap{grid-template-columns:1fr}.donut{margin:0 auto}.chart-summary{text-align:left}.settings-grid{grid-template-columns:1fr}.topbar h1{font-size:20px}}
+
+.danger-action{color:var(--red)}.danger-action:hover{background:rgba(214,94,99,.10);color:var(--red)}
+
+</style>
+
+<style>
+.auth-screen{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 15% 15%,rgba(243,199,68,.08),transparent 30%),radial-gradient(circle at 90% 85%,rgba(38,86,145,.18),transparent 35%),#071224;visibility:hidden;opacity:0;transition:.2s}
+.auth-screen.show{visibility:visible;opacity:1}.auth-card{position:relative;width:min(460px,100%);padding:32px;background:rgba(14,28,53,.92);border:1px solid rgba(255,255,255,.08);border-radius:24px;box-shadow:0 50px 100px rgba(0,0,0,.4);backdrop-filter:blur(18px)}
+.auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:26px}.auth-brand .brand-mark{width:48px;height:48px}.auth-brand strong{display:block;font-size:16px}.auth-brand span{display:block;color:#8f9bb0;font-size:10px;margin-top:3px}.auth-kicker{font-size:9px;font-weight:900;letter-spacing:.16em;color:#f3c744;margin-bottom:8px}.auth-card h2{font-size:28px;margin:0;letter-spacing:-.04em}.auth-subtitle{font-size:11px;color:#9ba7bb;line-height:1.65;margin:10px 0 22px}.auth-form{display:grid;gap:12px}.auth-form label{display:flex;flex-direction:column;gap:6px}.auth-form label span{font-size:10px;font-weight:800;color:#c7cfdd}.auth-form input{border:1px solid rgba(255,255,255,.09);background:#0a1730;color:#f5f7fa;border-radius:12px;padding:12px 13px;outline:0}.auth-form input:focus{border-color:#f3c744}.auth-submit{width:100%;justify-content:center;margin-top:4px}.auth-link{display:block;margin:14px auto 0;border:0;background:none;color:#f3c744;font-size:10px;font-weight:800;cursor:pointer}.auth-foot{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;padding-top:17px;border-top:1px solid rgba(255,255,255,.07);font-size:9px;color:#7f8ba0}.auth-alert{padding:10px 12px;border-radius:11px;background:rgba(214,94,99,.12);border:1px solid rgba(214,94,99,.25);color:#ffb4b7;font-size:10px;line-height:1.5;margin-bottom:12px}.firebase-setup{padding:12px;border-radius:12px;background:rgba(243,199,68,.1);border:1px solid rgba(243,199,68,.22);color:#eadfbd;font-size:10px;line-height:1.5;margin-bottom:12px}.firebase-setup strong{display:block;color:#f3c744;margin-bottom:4px}.firebase-setup p{margin:0}.auth-glow{position:absolute;width:280px;height:280px;border-radius:50%;filter:blur(80px);pointer-events:none}.auth-glow-a{background:rgba(243,199,68,.08);top:8%;left:7%}.auth-glow-b{background:rgba(47,111,237,.10);right:6%;bottom:8%}.secure-dot.connected{background:#42aa7e}.sidebar-footer .secure-dot{transition:.2s}
+</style>
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">HMH</div>
+        <div class="brand-copy">
+          <strong>HMH</strong>
+          <span>Finance System</span>
+        </div>
+      </div>
+
+      <div class="workspace-card">
+        <span class="workspace-label">WORKSPACE</span>
+        <strong id="workspaceName">HMH Group</strong>
+        <span id="workspacePeriod">FY 2026</span>
+      </div>
+
+      <nav class="nav-section">
+        <span class="nav-title">OVERVIEW</span>
+        <button class="nav-item active" data-route="dashboard">{ICON_DASH}<span>Dashboard</span></button>
+        <button class="nav-item" data-route="transactions">{ICON_TX}<span>Transactions</span></button>
+      </nav>
+
+      <nav class="nav-section">
+        <span class="nav-title">FINANCE</span>
+        <button class="nav-item" data-route="revenue">{ICON_REVENUE}<span>Revenue</span></button>
+        <button class="nav-item" data-route="expenses">{ICON_EXPENSE}<span>Expenses</span></button>
+        <button class="nav-item" data-route="invoices">{ICON_INVOICE}<span>Invoices & AR</span></button>
+        <button class="nav-item" data-route="cashflow">{ICON_CASH}<span>Cash Flow</span></button>
+        <button class="nav-item" data-route="reports">{ICON_REPORT}<span>Reports</span></button>
+      </nav>
+
+      <nav class="nav-section">
+        <span class="nav-title">OPERATIONS</span>
+        <button class="nav-item" data-route="projects">{ICON_PROJECT}<span>Projects</span></button>
+        <button class="nav-item" data-route="payroll">{ICON_PAYROLL}<span>Payroll</span></button>
+        <button class="nav-item" data-route="assets">{ICON_ASSET}<span>Assets</span></button>
+      </nav>
+
+      <div class="sidebar-spacer"></div>
+      <nav class="nav-section nav-bottom">
+        <button class="nav-item" data-route="settings">{ICON_SETTINGS}<span>Settings</span></button>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="secure-dot"></div>
+        <span id="connectionStatus">Connecting to Firebase…</span>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-button mobile-only" id="mobileNavBtn" aria-label="Open navigation">{ICON_MENU}</button>
+          <div>
+            <div class="eyebrow" id="pageEyebrow">FINANCE COMMAND CENTER</div>
+            <h1 id="pageTitle">Dashboard</h1>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <div class="period-control">
+            <span>{ICON_CALENDAR}</span>
+            <select id="periodSelect" aria-label="Reporting period">
+              <option value="2026">FY 2026</option>
+              <option value="2027">FY 2027</option>
+              <option value="2025">FY 2025</option>
+            </select>
+          </div>
+          <button class="icon-button" id="themeToggle" aria-label="Toggle theme" title="Toggle light/dark theme">{ICON_SUN}</button>
+          <button class="icon-button" id="exportDataBtn" title="Export data as JSON">{ICON_DOWNLOAD}</button>
+          <button class="user-chip" id="userMenuBtn">
+            <span class="avatar">HM</span>
+            <span class="user-chip-copy"><strong>Finance Admin</strong><span>Administrator</span></span>
+            {ICON_CHEVRON}
+          </button>
+        </div>
+      </header>
+
+      <div class="mobile-overlay" id="mobileOverlay"></div>
+      <section id="pageContainer" class="page-container"></section>
+    </main>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+  <div class="auth-screen" id="authScreen">
+    <div class="auth-glow auth-glow-a"></div><div class="auth-glow auth-glow-b"></div>
+    <div class="auth-card">
+      <div class="auth-brand"><div class="brand-mark">HMH</div><div><strong>HMH Finance</strong><span>Cloud Finance System</span></div></div>
+      <div class="auth-kicker">SECURE WORKSPACE</div>
+      <h2>Sign in to HMH Group</h2>
+      <p class="auth-subtitle">Finance data is stored in your Firebase Cloud Firestore workspace and synchronized across authorized devices.</p>
+      <div class="auth-alert" id="authAlert" hidden></div>
+      <div class="firebase-setup" id="firebaseSetup" hidden>
+        <strong>Firebase configuration required</strong>
+        <p>Open this file and replace the FIREBASE_CONFIG placeholders with the Web App configuration from Firebase Console. The config is client-side configuration; access to Firestore must still be protected by Security Rules.</p>
+      </div>
+      <form id="loginForm" class="auth-form">
+        <label><span>Email</span><input id="loginEmail" type="email" autocomplete="username" placeholder="finance@hmhgroup.id" required /></label>
+        <label><span>Password</span><input id="loginPassword" type="password" autocomplete="current-password" placeholder="••••••••" required /></label>
+        <button type="submit" class="btn btn-primary auth-submit">Sign in</button>
+      </form>
+      <button class="auth-link" id="resetPasswordBtn" type="button">Forgot password?</button>
+      <div class="auth-foot"><span class="secure-dot"></span><span>Firebase Authentication + Cloud Firestore</span></div>
+    </div>
+  </div>
+  <div id="modalRoot"></div>
+  <input type="file" id="importFile" accept="application/json" hidden />
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js';
+    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, onSnapshot, writeBatch } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js';
+
+    const ICON_DASH = `<svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>`;
+    const ICON_TX = `<svg viewBox="0 0 24 24"><path d="M7 3h10v4H7zM5 7h14v14H5zM9 11h6M9 15h6M9 19h3"/></svg>`;
+    const ICON_REVENUE = `<svg viewBox="0 0 24 24"><path d="M12 3v18M8 7.5C8 5.8 9.8 5 12 5s4 .8 4 2.5S14.2 10 12 10s-4 .8-4 2.5S9.8 15 12 15s4 .8 4 2.5S14 20 12 20s-4-.8-4-2.5"/></svg>`;
+    const ICON_EXPENSE = `<svg viewBox="0 0 24 24"><path d="M5 7h14M7 7l1-3h8l1 3M6 7l1 14h10l1-14M9 11v6M15 11v6"/></svg>`;
+    const ICON_INVOICE = `<svg viewBox="0 0 24 24"><path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h4"/></svg>`;
+    const ICON_CASH = `<svg viewBox="0 0 24 24"><path d="M4 7h16v12H4zM7 7V5h10v2M8 13h8M12 10v6M10 12h4"/></svg>`;
+    const ICON_REPORT = `<svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>`;
+    const ICON_PROJECT = `<svg viewBox="0 0 24 24"><path d="M3 6h7l2 2h9v11H3zM3 10h18"/></svg>`;
+    const ICON_PAYROLL = `<svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h3M14 13h2M8 17h8"/></svg>`;
+    const ICON_ASSET = `<svg viewBox="0 0 24 24"><path d="M7 3h10v18H7zM10 7h4M10 11h4M10 15h4"/></svg>`;
+    const ICON_SETTINGS = `<svg viewBox="0 0 24 24"><path d="M9.7 3.7l.5-1.2h3.6l.5 1.2 1.1.6 1.2-.4 2.5 2.5-.4 1.2.6 1.1 1.2.5v3.6l-1.2.5-.6 1.1.4 1.2-2.5 2.5-1.2-.4-1.1.6-.5 1.2h-3.6l-.5-1.2-1.1-.6-1.2.4-2.5-2.5.4-1.2-.6-1.1-1.2-.5V9.2l1.2-.5.6-1.1-.4-1.2 2.5-2.5 1.2.4 1.1-.6zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>`;
+    const ICON_MENU = `<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>`;
+    const ICON_CALENDAR = `<svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 2v4M16 2v4M5 9h14"/></svg>`;
+    const ICON_SUN = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>`;
+    const ICON_MOON = `<svg viewBox="0 0 24 24"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5z"/></svg>`;
+    const ICON_DOWNLOAD = `<svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 20h14"/></svg>`;
+    const ICON_CHEVRON = `<svg viewBox="0 0 24 24"><path d="M8 10l4 4 4-4"/></svg>`;
+    const ICON_PLUS = `<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>`;
+    const ICON_SEARCH = `<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M16 16l5 5"/></svg>`;
+    const ICON_FILTER = `<svg viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></svg>`;
+    const ICON_MORE = `<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>`;
+    const ICON_ARROW_UP = `<svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg>`;
+    const ICON_ARROW_DOWN = `<svg viewBox="0 0 24 24"><path d="M12 5v14M18 13l-6 6-6-6"/></svg>`;
+    const ICON_CHECK = `<svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg>`;
+    const ICON_CLOSE = `<svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg>`;
+    const ICON_EDIT = `<svg viewBox="0 0 24 24"><path d="M5 19l1-4L15 6l3 3-9 9zM14 7l3 3"/></svg>`;
+    const ICON_TRASH = `<svg viewBox="0 0 24 24"><path d="M5 7h14M10 11v6M14 11v6M8 7l1-3h6l1 3M7 7l1 14h8l1-14"/></svg>`;
+    const ICON_EYE = `<svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="2.5"/></svg>`;
+    const ICON_RECEIPT = `<svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-1.5L12 21l-3-1.5L6 21zM9 8h6M9 12h6M9 16h4"/></svg>`;
+
+    const routes = {
+      dashboard: {title:'Dashboard', eyebrow:'FINANCE COMMAND CENTER'},
+      transactions: {title:'Transactions', eyebrow:'GENERAL LEDGER'},
+      revenue: {title:'Revenue', eyebrow:'INCOME MANAGEMENT'},
+      expenses: {title:'Expenses', eyebrow:'SPEND MANAGEMENT'},
+      invoices: {title:'Invoices & AR', eyebrow:'RECEIVABLES'},
+      cashflow: {title:'Cash Flow', eyebrow:'LIQUIDITY MANAGEMENT'},
+      reports: {title:'Reports', eyebrow:'FINANCIAL REPORTING'},
+      projects: {title:'Projects', eyebrow:'PROJECT PROFITABILITY'},
+      payroll: {title:'Payroll', eyebrow:'PEOPLE COSTS'},
+      assets: {title:'Assets', eyebrow:'FIXED ASSETS'},
+      settings: {title:'Settings', eyebrow:'SYSTEM CONFIGURATION'},
+    };
+
+    const defaultData = {
+      settings: {
+        companyName: 'HMH Group',
+        legalName: 'HMH Group',
+        currency: 'IDR',
+        year: 2026,
+        taxRate: 11,
+        defaultReserveRate: 10,
+        theme: 'dark',
+        openingCash: 125000000,
+        fiscalStart: 1,
+      },
+      accounts: [
+        {id:'ACC-001', name:'BCA Business Account', type:'Bank', balance:85000000},
+        {id:'ACC-002', name:'Mandiri Business Account', type:'Bank', balance:30000000},
+        {id:'ACC-003', name:'Petty Cash', type:'Cash', balance:10000000},
+      ],
+      revenue: [
+        {id:'REV-001',date:'2026-01-08',client:'Nexa Studio',project:'Website Revamp',category:'Web Development',amount:18000000,vat:1980000,status:'Paid',account:'BCA Business Account',notes:'Phase 1'},
+        {id:'REV-002',date:'2026-01-21',client:'Aruna Living',project:'Social Media Retainer',category:'Digital Marketing',amount:12500000,vat:1375000,status:'Paid',account:'Mandiri Business Account',notes:'January retainer'},
+        {id:'REV-003',date:'2026-02-10',client:'PT Karya Digital',project:'Brand Identity',category:'Design',amount:22000000,vat:2420000,status:'Paid',account:'BCA Business Account',notes:'Brand package'},
+        {id:'REV-004',date:'2026-02-19',client:'Nexa Studio',project:'SEO Retainer',category:'Digital Marketing',amount:15000000,vat:1650000,status:'Pending',account:'BCA Business Account',notes:'Invoice due'},
+        {id:'REV-005',date:'2026-03-05',client:'Luma Foods',project:'E-commerce Store',category:'Web Development',amount:32000000,vat:3520000,status:'Paid',account:'BCA Business Account',notes:'Milestone 1'},
+        {id:'REV-006',date:'2026-03-20',client:'Aruna Living',project:'Content Production',category:'Content Creation',amount:9500000,vat:1045000,status:'Pending',account:'Mandiri Business Account',notes:'March content'},
+        {id:'REV-007',date:'2026-04-07',client:'PT Karya Digital',project:'Campaign Launch',category:'Digital Marketing',amount:27500000,vat:3025000,status:'Paid',account:'BCA Business Account',notes:'Campaign launch'},
+      ],
+      expenses: [
+        {id:'EXP-001',date:'2026-01-03',vendor:'Adobe',category:'Software',type:'Operating Expense',amount:1850000,status:'Paid',account:'BCA Business Account',notes:'Creative Cloud'},
+        {id:'EXP-002',date:'2026-01-12',vendor:'Meta Ads',category:'Marketing',type:'Direct Cost',amount:4800000,status:'Paid',account:'BCA Business Account',notes:'Client campaign'},
+        {id:'EXP-003',date:'2026-01-31',vendor:'Freelance Designer',category:'Freelancer',type:'Direct Cost',amount:3500000,status:'Paid',account:'Mandiri Business Account',notes:'Client delivery'},
+        {id:'EXP-004',date:'2026-02-04',vendor:'Google Workspace',category:'Software',type:'Operating Expense',amount:1250000,status:'Paid',account:'BCA Business Account',notes:'Team plan'},
+        {id:'EXP-005',date:'2026-02-22',vendor:'Internet Provider',category:'Utilities',type:'Operating Expense',amount:900000,status:'Paid',account:'BCA Business Account',notes:'Office internet'},
+        {id:'EXP-006',date:'2026-03-15',vendor:'Freelance Developer',category:'Freelancer',type:'Direct Cost',amount:7800000,status:'Paid',account:'BCA Business Account',notes:'E-commerce build'},
+        {id:'EXP-007',date:'2026-04-02',vendor:'Canva Pro',category:'Software',type:'Operating Expense',amount:820000,status:'Paid',account:'Mandiri Business Account',notes:'Design tools'},
+        {id:'EXP-008',date:'2026-04-18',vendor:'Coworking Space',category:'Office',type:'Operating Expense',amount:4500000,status:'Paid',account:'Mandiri Business Account',notes:'Monthly office'},
+      ],
+      invoices: [
+        {id:'INV-2026-001',date:'2026-01-08',due:'2026-01-23',client:'Nexa Studio',project:'Website Revamp',amount:18000000,status:'Paid'},
+        {id:'INV-2026-002',date:'2026-01-21',due:'2026-02-05',client:'Aruna Living',project:'Social Media Retainer',amount:12500000,status:'Paid'},
+        {id:'INV-2026-003',date:'2026-02-10',due:'2026-02-25',client:'PT Karya Digital',project:'Brand Identity',amount:22000000,status:'Paid'},
+        {id:'INV-2026-004',date:'2026-02-19',due:'2026-03-06',client:'Nexa Studio',project:'SEO Retainer',amount:15000000,status:'Overdue'},
+        {id:'INV-2026-005',date:'2026-03-05',due:'2026-03-20',client:'Luma Foods',project:'E-commerce Store',amount:32000000,status:'Paid'},
+        {id:'INV-2026-006',date:'2026-03-20',due:'2026-04-04',client:'Aruna Living',project:'Content Production',amount:9500000,status:'Pending'},
+        {id:'INV-2026-007',date:'2026-04-07',due:'2026-04-22',client:'PT Karya Digital',project:'Campaign Launch',amount:27500000,status:'Paid'},
+      ],
+      projects: [
+        {id:'PRJ-001',client:'Nexa Studio',name:'Website Revamp',revenue:18000000,directCost:8200000,overhead:1500000,status:'Completed'},
+        {id:'PRJ-002',client:'Aruna Living',name:'Social Media Retainer',revenue:22000000,directCost:9500000,overhead:2200000,status:'Active'},
+        {id:'PRJ-003',client:'PT Karya Digital',name:'Brand Identity',revenue:22000000,directCost:7300000,overhead:1750000,status:'Completed'},
+        {id:'PRJ-004',client:'Luma Foods',name:'E-commerce Store',revenue:32000000,directCost:16800000,overhead:2800000,status:'Active'},
+        {id:'PRJ-005',client:'PT Karya Digital',name:'Campaign Launch',revenue:27500000,directCost:12000000,overhead:2100000,status:'Active'},
+      ],
+      payroll: [
+        {id:'PAY-001',month:'2026-01',employee:'Haidar Muttaqin Hakim',role:'Founder / Director',base:12000000,allowance:2500000,deduction:500000,status:'Paid'},
+        {id:'PAY-002',month:'2026-01',employee:'Alya Ramadhani',role:'Account Executive',base:7000000,allowance:1000000,deduction:250000,status:'Paid'},
+        {id:'PAY-003',month:'2026-01',employee:'Raka Pratama',role:'Developer',base:8500000,allowance:1000000,deduction:300000,status:'Paid'},
+        {id:'PAY-004',month:'2026-02',employee:'Haidar Muttaqin Hakim',role:'Founder / Director',base:12000000,allowance:2500000,deduction:500000,status:'Paid'},
+        {id:'PAY-005',month:'2026-02',employee:'Alya Ramadhani',role:'Account Executive',base:7000000,allowance:1000000,deduction:250000,status:'Paid'},
+        {id:'PAY-006',month:'2026-02',employee:'Raka Pratama',role:'Developer',base:8500000,allowance:1000000,deduction:300000,status:'Paid'},
+      ],
+      assets: [
+        {id:'AST-001',date:'2026-01-10',name:'MacBook Pro',category:'IT Equipment',cost:32000000,usefulLife:4,method:'Straight-line',status:'Active'},
+        {id:'AST-002',date:'2026-02-03',name:'Office Workstations',category:'Furniture',cost:18000000,usefulLife:5,method:'Straight-line',status:'Active'},
+        {id:'AST-003',date:'2026-03-02',name:'Camera + Lens Kit',category:'Production',cost:24000000,usefulLife:4,method:'Straight-line',status:'Active'},
+      ],
+      transactions: [
+        {id:'TRX-001',date:'2026-04-18',description:'Coworking Space',category:'Office',direction:'Outflow',amount:4500000,account:'Mandiri Business Account',reference:'EXP-008'},
+        {id:'TRX-002',date:'2026-04-07',description:'Campaign Launch — PT Karya Digital',category:'Revenue',direction:'Inflow',amount:27500000,account:'BCA Business Account',reference:'INV-2026-007'},
+        {id:'TRX-003',date:'2026-04-02',description:'Canva Pro',category:'Software',direction:'Outflow',amount:820000,account:'Mandiri Business Account',reference:'EXP-007'},
+        {id:'TRX-004',date:'2026-03-20',description:'Content Production — Aruna Living',category:'Revenue',direction:'Inflow',amount:9500000,account:'Mandiri Business Account',reference:'INV-2026-006'},
+        {id:'TRX-005',date:'2026-03-15',description:'Freelance Developer',category:'Freelancer',direction:'Outflow',amount:7800000,account:'BCA Business Account',reference:'EXP-006'},
+        {id:'TRX-006',date:'2026-03-05',description:'E-commerce Store — Luma Foods',category:'Revenue',direction:'Inflow',amount:32000000,account:'BCA Business Account',reference:'INV-2026-005'},
+        {id:'TRX-007',date:'2026-02-22',description:'Internet Provider',category:'Utilities',direction:'Outflow',amount:900000,account:'BCA Business Account',reference:'EXP-005'},
+        {id:'TRX-008',date:'2026-02-10',description:'Brand Identity — PT Karya Digital',category:'Revenue',direction:'Inflow',amount:22000000,account:'BCA Business Account',reference:'INV-2026-003'},
+      ],
+      budgets: [
+        {id:'BUD-001',month:'2026-01',category:'Software',budget:2500000},
+        {id:'BUD-002',month:'2026-01',category:'Marketing',budget:6000000},
+        {id:'BUD-003',month:'2026-01',category:'Payroll',budget:28000000},
+        {id:'BUD-004',month:'2026-02',category:'Software',budget:2500000},
+        {id:'BUD-005',month:'2026-02',category:'Office',budget:5000000},
+        {id:'BUD-006',month:'2026-03',category:'Freelancer',budget:10000000},
+      ]
+    };
+
+    // ==============================
+    // HMH FIREBASE DATA LAYER
+    // ==============================
+    // Paste the exact Web App config from Firebase Console here.
+const firebaseConfig = {
+  apiKey: "AIzaSyBYI53yjOV0unl6ckxpzYtYyGI24z3ttpY",
+  authDomain: "hmh-finance-e51fa.firebaseapp.com",
+  projectId: "hmh-finance-e51fa",
+  storageBucket: "hmh-finance-e51fa.firebasestorage.app",
+  messagingSenderId: "1096469700499",
+  appId: "1:1096469700499:web:87f02508c47adcd05cd266",
+  measurementId: "G-VS67ZPL1HJ"
+};
+
+    const COMPANY_ID = 'hmh-group';
+    const RECORD_MODULES = ['revenue','expenses','invoices','transactions','projects','payroll','assets'];
+    const defaultSettings = { companyName:'HMH Group', legalName:'HMH Group', currency:'IDR', year:2026, taxRate:11, defaultReserveRate:10 };
+    const defaultAccounts = [
+      {id:'ACC-001', name:'BCA Business Account', type:'Bank', openingBalance:85000000},
+      {id:'ACC-002', name:'Mandiri Business Account', type:'Bank', openingBalance:30000000},
+      {id:'ACC-003', name:'Petty Cash', type:'Cash', openingBalance:10000000}
+    ];
+
+    const state = {
+      data: { settings:{...defaultSettings}, accounts:[], revenue:[], expenses:[], invoices:[], transactions:[], projects:[], payroll:[], assets:[] },
+      route: 'dashboard', filters:{}, editId:null, user:null, syncing:false, ready:false
+    };
+
+    let firebaseApp = null;
+    let auth = null;
+    let db = null;
+    let unsubSettings = null, unsubAccounts = null, unsubRecords = null;
+
+    const settingsRef = () => doc(db, 'companies', COMPANY_ID, 'meta', 'settings');
+    const accountsRef = () => collection(db, 'companies', COMPANY_ID, 'accounts');
+    const recordsRef = () => collection(db, 'companies', COMPANY_ID, 'records');
+    const recordRef = id => doc(db, 'companies', COMPANY_ID, 'records', id);
+    const accountRef = id => doc(db, 'companies', COMPANY_ID, 'accounts', id);
+
+    function deepClone(v){ return JSON.parse(JSON.stringify(v)); }
+    function firebaseIsConfigured(){ return Boolean(FIREBASE_CONFIG?.apiKey && !String(FIREBASE_CONFIG.apiKey).startsWith('YOUR_') && FIREBASE_CONFIG?.projectId && !String(FIREBASE_CONFIG.projectId).startsWith('YOUR_') && FIREBASE_CONFIG?.appId && !String(FIREBASE_CONFIG.appId).startsWith('YOUR_')); }
+    function mergeSettings(next){ state.data.settings = {...defaultSettings,...(next||{}),theme:localStorage.getItem('hmh_theme')||'dark'}; }
+    function applyTheme(){ document.documentElement.dataset.theme=state.data.settings.theme||'dark'; }
+    function showAuthScreen(message='', setup=false){ const el=document.getElementById('authScreen'); el.classList.add('show'); document.getElementById('authAlert').hidden=!message; document.getElementById('authAlert').textContent=message; document.getElementById('firebaseSetup').hidden=!setup; document.getElementById('app').style.visibility='hidden'; }
+    function hideAuthScreen(){ document.getElementById('authScreen').classList.remove('show'); document.getElementById('app').style.visibility='visible'; }
+    function setConnection(text, connected=false){ const el=document.getElementById('connectionStatus'); if(!el)return; el.textContent=text; el.previousElementSibling?.classList.toggle('connected',connected); }
+
+    async function ensureWorkspace(){
+      const sSnap = await getDoc(settingsRef());
+      if(!sSnap.exists()){ await setDoc(settingsRef(), {...defaultSettings}); }
+      const aSnap = await getDocs(accountsRef());
+      if(aSnap.empty){
+        const batch = writeBatch(db);
+        defaultAccounts.forEach(a=>batch.set(accountRef(a.id), a));
+        await batch.commit();
+      }
+    }
+
+    function clearSubscriptions(){ [unsubSettings,unsubAccounts,unsubRecords].forEach(fn=>{try{fn?.()}catch(_){}}); unsubSettings=unsubAccounts=unsubRecords=null; }
+
+    async function startRealtimeSync(){
+      clearSubscriptions();
+      await ensureWorkspace();
+      state.syncing=true;
+      setConnection('Syncing Firebase Cloud…', false);
+      unsubSettings = onSnapshot(settingsRef(), snap=>{ if(snap.exists()) mergeSettings(snap.data()); render(); });
+      unsubAccounts = onSnapshot(accountsRef(), snap=>{ state.data.accounts=snap.docs.map(d=>({id:d.id,...d.data()})); render(); });
+      unsubRecords = onSnapshot(recordsRef(), snap=>{
+        const next={revenue:[],expenses:[],invoices:[],transactions:[],projects:[],payroll:[],assets:[]};
+        snap.docs.forEach(d=>{const x={id:d.id,...d.data()}; if(next[x.module]) next[x.module].push(x);});
+        Object.assign(state.data,next); state.ready=true; state.syncing=false; setConnection('Firebase Cloud • Live',true); render();
+      }, err=>{ console.error(err); state.syncing=false; setConnection('Firebase error',false); toast(firebaseErrorMessage(err),'danger'); });
+      render();
+    }
+
+    function firebaseErrorMessage(err){
+      const code=err?.code||'';
+      if(code.includes('permission-denied')) return 'Firestore permission denied. Check your Firebase Authentication and Security Rules.';
+      if(code.includes('failed-precondition')) return 'Firestore is not fully configured. Open Firebase Console and create/enable Cloud Firestore.';
+      if(code.includes('unavailable')) return 'Firebase is temporarily unavailable. Check your connection and try again.';
+      return err?.message || 'Firebase request failed.';
+    }
+
+    async function saveSettings(next){
+      if(!db || !state.user) return;
+      const payload={...defaultSettings,...next}; delete payload.theme;
+      state.data.settings={...state.data.settings,...payload};
+      await setDoc(settingsRef(), payload, {merge:true});
+      toast('Settings saved','success');
+    }
+
+    async function saveData(showToast=true){
+      if(!db || !state.user) return;
+      await setDoc(settingsRef(), {...defaultSettings,...state.data.settings, theme:undefined}, {merge:true});
+      if(showToast) toast('Changes saved','success');
+    }
+
+    async function resetData(){
+      if(!confirm('Reset the HMH finance workspace? All Firestore finance records will be deleted and the default accounts will be restored.')) return;
+      try{
+        const snap=await getDocs(recordsRef());
+        let batch=writeBatch(db), count=0;
+        for(const d of snap.docs){ batch.delete(d.ref); if(++count===450){ await batch.commit(); batch=writeBatch(db); count=0; }}
+        if(count) await batch.commit();
+        const accSnap=await getDocs(accountsRef());
+        batch=writeBatch(db); count=0;
+        for(const d of accSnap.docs){ batch.delete(d.ref); if(++count===450){ await batch.commit(); batch=writeBatch(db); count=0; }}
+        defaultAccounts.forEach(a=>{batch.set(accountRef(a.id),a);count++;});
+        if(count) await batch.commit();
+        await setDoc(settingsRef(), {...defaultSettings});
+        toast('Workspace reset','success');
+      }catch(err){ toast(firebaseErrorMessage(err),'danger'); }
+    }
+
+    function fmtMoney(n, compact=false){
+      const amount = Number(n||0);
+      if (compact) {
+        const a=Math.abs(amount);
+        if (a>=1e9) return (amount/1e9).toFixed(1)+' B';
+        if (a>=1e6) return (amount/1e6).toFixed(1)+' M';
+        if (a>=1e3) return (amount/1e3).toFixed(0)+' K';
+      }
+      return new Intl.NumberFormat('id-ID',{style:'currency',currency:state.data.settings.currency||'IDR',maximumFractionDigits:0}).format(amount);
+    }
+    function fmtNumber(n){ return new Intl.NumberFormat('id-ID').format(Number(n||0)); }
+    function fmtDate(s){ if(!s) return '-'; const d=new Date(s+'T00:00:00'); return new Intl.DateTimeFormat('en-GB',{day:'2-digit',month:'short',year:'numeric'}).format(d); }
+    function monthLabel(m){ const d=new Date(m+'-01T00:00:00'); return new Intl.DateTimeFormat('en-US',{month:'short'}).format(d); }
+    function esc(v){ return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+    function uid(prefix){ return prefix+'-'+Date.now().toString(36).toUpperCase().slice(-6); }
+    function getMonths(){ return Array.from({length:12},(_,i)=>`${state.data.settings.year}-${String(i+1).padStart(2,'0')}`); }
+    function sum(arr,key){ return arr.reduce((a,x)=>a+Number(x[key]||0),0); }
+    function getRevenue(){ return state.data.revenue.filter(x=>String(x.date||'').startsWith(String(state.data.settings.year))); }
+    function getExpenses(){ return state.data.expenses.filter(x=>String(x.date||'').startsWith(String(state.data.settings.year))); }
+    function getInvoices(){ return state.data.invoices.filter(x=>String(x.date||'').startsWith(String(state.data.settings.year))); }
+    function getTransactions(){ return state.data.transactions.filter(x=>String(x.date||'').startsWith(String(state.data.settings.year))); }
+    function totalRevenue(){ return sum(getRevenue(),'amount'); }
+    function totalExpenses(){ return sum(getExpenses(),'amount'); }
+    function totalPayroll(){ return state.data.payroll.filter(x=>String(x.month||'').startsWith(String(state.data.settings.year))).reduce((a,x)=>a+Number(x.base||0)+Number(x.allowance||0),0); }
+    function totalAR(){ return getInvoices().filter(x=>x.status!=='Paid').reduce((a,x)=>a+Number(x.amount||0),0); }
+    function cashBalance(){
+      return (state.data.accounts||[]).reduce((a,x)=>a+accountBalance(x.name),0);
+    }
+    function paidRevenue(){ return getRevenue().filter(x=>x.status==='Paid').reduce((a,x)=>a+Number(x.amount||0),0); }
+    function paidExpenses(){ return getExpenses().filter(x=>x.status==='Paid').reduce((a,x)=>a+Number(x.amount||0),0); }
+    function opProfit(){ return totalRevenue() - totalExpenses() - totalPayroll(); }
+    function margin(){ return totalRevenue() ? opProfit()/totalRevenue()*100 : 0; }
+    function directCosts(){ return getExpenses().filter(x=>x.type==='Direct Cost').reduce((a,x)=>a+Number(x.amount||0),0); }
+    function statusBadge(status){
+      const map={Paid:'success',Completed:'success',Active:'info',Pending:'warning',Overdue:'danger',Draft:'muted','At Risk':'danger'};
+      const cls=map[status]||'muted'; return `<span class="badge ${cls}">${esc(status)}</span>`;
+    }
+    function trendBadge(v, positive=true){
+      const val=Number(v||0); const cls=(val>=0)===positive?'positive':'negative';
+      const icon=val>=0?ICON_ARROW_UP:ICON_ARROW_DOWN;
+      return `<span class="trend ${cls}">${icon}${Math.abs(val).toFixed(1)}%</span>`;
+    }
+    function toast(msg,type='info'){
+      const c=document.getElementById('toastContainer'); const el=document.createElement('div');
+      el.className=`toast ${type}`; el.innerHTML=`<span class="toast-dot"></span><span>${esc(msg)}</span>`; c.appendChild(el);
+      setTimeout(()=>el.classList.add('hide'),2400); setTimeout(()=>el.remove(),3000);
+    }
+    function chartLine(values, labels, options={}){
+      const w=options.w||720,h=options.h||250,pad=options.pad||30,max=Math.max(1,...values),min=Math.min(0,...values),range=max-min||1;
+      const x=i=>pad+(w-pad*2)*(i/(values.length-1||1));
+      const y=v=>h-pad-(h-pad*2)*((v-min)/range);
+      const pts=values.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
+      let dots=''; values.forEach((v,i)=>{dots+=`<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="var(--yellow)" stroke="var(--surface)" stroke-width="2"/>`;});
+      let grid=''; for(let i=0;i<4;i++){ const gy=pad+(h-pad*2)*(i/3); grid+=`<line x1="${pad}" y1="${gy}" x2="${w-pad}" y2="${gy}" class="chart-grid"/>`; }
+      let labs=labels.map((l,i)=>`<text x="${x(i)}" y="${h-6}" class="chart-label" text-anchor="middle">${esc(l)}</text>`).join('');
+      return `<svg viewBox="0 0 ${w} ${h}" class="chart-svg"><defs><linearGradient id="lineFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="var(--yellow)" stop-opacity=".28"/><stop offset="100%" stop-color="var(--yellow)" stop-opacity="0"/></linearGradient></defs>${grid}<polyline points="${pts} ${x(values.length-1)},${h-pad} ${x(0)},${h-pad}" fill="url(#lineFill)" stroke="none"/><polyline points="${pts}" fill="none" stroke="var(--yellow)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labs}</svg>`;
+    }
+    function donutChart(values, labels, colors){
+      const total=values.reduce((a,b)=>a+b,0)||1; let acc=0; const r=54,cx=80,cy=80,circ=2*Math.PI*r;
+      let rings=''; values.forEach((v,i)=>{ const dash=(v/total)*circ; const off=-(acc/total)*circ; rings+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colors[i%colors.length]}" stroke-width="20" stroke-dasharray="${dash} ${circ-dash}" stroke-dashoffset="${off}"/>`; acc+=v; });
+      const list=labels.map((l,i)=>`<div class="legend-item"><span class="legend-dot" style="background:${colors[i%colors.length]}"></span><span>${esc(l)}</span><strong>${Math.round(values[i]/total*100)}%</strong></div>`).join('');
+      return `<div class="donut-wrap"><svg viewBox="0 0 160 160" class="donut"><circle cx="80" cy="80" r="54" fill="none" stroke="var(--border)" stroke-width="20"/>${rings}<circle cx="80" cy="80" r="36" fill="var(--surface)"/><text x="80" y="76" text-anchor="middle" class="donut-total">${Math.round(total?100:0)}%</text><text x="80" y="94" text-anchor="middle" class="donut-label">allocation</text></svg><div class="legend">${list}</div></div>`;
+    }
+    function emptyState(title='No records found',desc='Add a record to start building your finance workspace.'){
+      return `<div class="empty-state"><div class="empty-icon">${ICON_RECEIPT}</div><strong>${esc(title)}</strong><span>${esc(desc)}</span></div>`;
+    }
+    function render(){
+      document.documentElement.dataset.theme=state.data.settings.theme||'dark';
+      const themeBtn=document.getElementById('themeToggle'); if(themeBtn) themeBtn.innerHTML=state.data.settings.theme==='dark'?ICON_SUN:ICON_MOON;
+      document.getElementById('workspaceName').textContent=state.data.settings.companyName||'HMH Group';
+      document.getElementById('workspacePeriod').textContent='FY '+state.data.settings.year;
+      document.getElementById('periodSelect').value=String(state.data.settings.year);
+      const r=routes[state.route]||routes.dashboard;
+      document.getElementById('pageEyebrow').textContent=r.eyebrow;
+      document.getElementById('pageTitle').textContent=r.title;
+      document.querySelectorAll('.nav-item').forEach(el=>el.classList.toggle('active',el.dataset.route===state.route));
+      const c=document.getElementById('pageContainer');
+      const viewMap={dashboard:renderDashboard,transactions:renderTransactions,revenue:renderRevenue,expenses:renderExpenses,invoices:renderInvoices,cashflow:renderCashflow,reports:renderReports,projects:renderProjects,payroll:renderPayroll,assets:renderAssets,settings:renderSettings};
+      c.innerHTML=viewMap[state.route]();
+      bindPageEvents();
+      closeMobileNav();
+    }
+
+    function renderDashboard(){
+      const rev=totalRevenue(), exp=totalExpenses(), profit=opProfit(), ar=totalAR(), cash=cashBalance();
+      const months=getMonths();
+      const monthlyRev=months.map(m=>getRevenue().filter(x=>x.date.startsWith(m)).reduce((a,x)=>a+x.amount,0));
+      const monthlyExp=months.map(m=>getExpenses().filter(x=>x.date.startsWith(m)).reduce((a,x)=>a+x.amount,0)+state.data.payroll.filter(x=>x.month===m).reduce((a,x)=>a+x.base+x.allowance,0));
+      const monthLabels=months.map(monthLabel);
+      const projectRows=state.data.projects.map(p=>({...p,profit:Number(p.revenue)-Number(p.directCost)-Number(p.overhead),margin:Number(p.revenue)?(Number(p.revenue)-Number(p.directCost)-Number(p.overhead))/Number(p.revenue)*100:0})).sort((a,b)=>b.profit-a.profit).slice(0,5);
+      const recent=getTransactions().slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,6);
+      const expenseCats={}; getExpenses().forEach(e=>{expenseCats[e.category]=(expenseCats[e.category]||0)+e.amount;});
+      const topCats=Object.entries(expenseCats).sort((a,b)=>b[1]-a[1]).slice(0,5);
+      const colors=['#f3c744','#2f6fed','#4fb286','#db6b6b','#8a77e6'];
+      return `
+      <div class="hero-row">
+        <div><h2>Good evening, HMH.</h2><p>Your finance cockpit is up to date. Monitor liquidity, profitability, and receivables from one place.</p></div>
+        <div class="hero-actions"><button class="btn btn-primary" data-action="quick-add">${ICON_PLUS}<span>New transaction</span></button><button class="btn btn-secondary" data-action="export-csv">${ICON_DOWNLOAD}<span>Export CSV</span></button></div>
+      </div>
+      <div class="kpi-grid">
+        ${kpiCard('Total Revenue',fmtMoney(rev,true),'YTD',rev,'finance')}
+        ${kpiCard('Operating Expenses',fmtMoney(exp+totalPayroll(),true),'YTD',-(exp+totalPayroll()),'expense')}
+        ${kpiCard('Operating Profit',fmtMoney(profit,true),margin().toFixed(1)+'% margin',profit,'profit')}
+        ${kpiCard('Cash Balance',fmtMoney(cash,true),state.data.accounts.length+' accounts',cash,'cash')}
+        ${kpiCard('Accounts Receivable',fmtMoney(ar,true),'Open invoices',ar,'ar')}
+      </div>
+      <div class="grid-2-1">
+        <section class="panel panel-chart">
+          <div class="panel-head"><div><span class="section-kicker">12-MONTH VIEW</span><h3>Revenue performance</h3></div><div class="chart-summary"><strong>${fmtMoney(rev,true)}</strong><span>YTD revenue</span></div></div>
+          ${chartLine(monthlyRev,monthLabels)}
+          <div class="chart-legend-inline"><span><i class="line-swatch"></i> Revenue</span><span><i class="line-swatch muted"></i> Operating outflow <small>(hover in Reports for detail)</small></span></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><div><span class="section-kicker">SPEND MIX</span><h3>Expense allocation</h3></div><button class="icon-button subtle" data-route="expenses">${ICON_MORE}</button></div>
+          ${topCats.length ? donutChart(topCats.map(x=>x[1]),topCats.map(x=>x[0]),colors) : emptyState('No expenses','Add your first expense to see allocation.')}
+        </section>
+      </div>
+      <div class="grid-2-1">
+        <section class="panel">
+          <div class="panel-head"><div><span class="section-kicker">RECENT ACTIVITY</span><h3>Latest transactions</h3></div><button class="text-button" data-route="transactions">View all ${ICON_CHEVRON}</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Date</th><th>Description</th><th>Account</th><th>Amount</th></tr></thead><tbody>
+            ${recent.map(x=>`<tr><td>${fmtDate(x.date)}</td><td><strong>${esc(x.description)}</strong><small>${esc(x.reference||x.category)}</small></td><td>${esc(x.account)}</td><td class="money ${x.direction==='Inflow'?'money-in':'money-out'}">${x.direction==='Inflow'?'+':'-'}${fmtMoney(x.amount)}</td></tr>`).join('') || `<tr><td colspan="4">${emptyState()}</td></tr>`}
+          </tbody></table></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><div><span class="section-kicker">PORTFOLIO</span><h3>Project profitability</h3></div><button class="text-button" data-route="projects">Open projects ${ICON_CHEVRON}</button></div>
+          <div class="mini-list">${projectRows.map(p=>`<div class="mini-row"><div><strong>${esc(p.name)}</strong><small>${esc(p.client)}</small></div><div class="mini-row-right"><strong>${fmtMoney(p.profit,true)}</strong><span>${p.margin.toFixed(0)}% margin</span></div></div>`).join('') || emptyState('No projects')}</div>
+        </section>
+      </div>`;
+    }
+    function kpiCard(title,value,sub,raw,type){
+      const glyph={finance:ICON_REVENUE,expense:ICON_EXPENSE,profit:ICON_REPORT,cash:ICON_CASH,ar:ICON_INVOICE}[type]||ICON_DASH;
+      const sign=raw>=0?'':'negative';
+      return `<article class="kpi-card"><div class="kpi-top"><div class="kpi-icon">${glyph}</div><span class="kpi-tag">${esc(sub)}</span></div><span class="kpi-label">${esc(title)}</span><strong class="kpi-value">${value}</strong><div class="kpi-bottom"><span class="kpi-indicator ${sign}">${type==='expense'?'Cost managed':type==='cash'?'Available liquidity':type==='ar'?'Outstanding':'YTD tracked'}</span></div></article>`;
+    }
+
+    function toolbar(title,desc,addLabel='Add record'){
+      return `<div class="page-intro"><div><span class="section-kicker">${esc(routes[state.route].eyebrow)}</span><h2>${esc(title)}</h2><p>${esc(desc)}</p></div><div class="page-actions"><button class="btn btn-secondary" data-action="export-current">${ICON_DOWNLOAD}<span>Export</span></button><button class="btn btn-primary" data-action="add-record">${ICON_PLUS}<span>${esc(addLabel)}</span></button></div></div>`;
+    }
+    function dataTableToolbar(){
+      return `<div class="table-toolbar"><label class="search-box">${ICON_SEARCH}<input id="tableSearch" placeholder="Search records..."/></label><button class="icon-button subtle" data-action="filter-toggle">${ICON_FILTER}<span class="filter-text">Filter</span></button></div>`;
+    }
+    function renderTransactions(){
+      const rows=getTransactions().slice().sort((a,b)=>b.date.localeCompare(a.date));
+      return toolbar('Transactions','General ledger view of cash activity across company accounts.','New transaction') + `<section class="panel"><div class="panel-head"><div><span class="section-kicker">GENERAL LEDGER</span><h3>${rows.length} entries</h3></div>${dataTableToolbar()}</div><div class="table-wrap"><table id="dataTable"><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Direction</th><th>Account</th><th class="right">Amount</th><th></th></tr></thead><tbody>${rows.map(x=>transactionRow(x)).join('')||`<tr><td colspan="7">${emptyState()}</td></tr>`}</tbody></table></div></section>`;
+    }
+    function transactionRow(x){return `<tr data-search="${esc([x.date,x.description,x.category,x.direction,x.account,x.reference].join(' '))}"><td>${fmtDate(x.date)}</td><td><strong>${esc(x.description)}</strong><small>${esc(x.reference||'')}</small></td><td>${esc(x.category)}</td><td>${x.direction==='Inflow'?`<span class="flow in">${ICON_ARROW_UP} Inflow</span>`:`<span class="flow out">${ICON_ARROW_DOWN} Outflow</span>`}</td><td>${esc(x.account)}</td><td class="right money">${fmtMoney(x.amount)}</td><td><button class="row-action" title="Edit" data-edit="transactions" data-id="${x.id}">${ICON_EDIT}</button><button class="row-action danger-action" title="Delete" data-delete="transactions" data-id="${x.id}">${ICON_TRASH}</button></td></tr>`;}
+
+    function renderRevenue(){
+      const rows=getRevenue().slice().sort((a,b)=>b.date.localeCompare(a.date));
+      return toolbar('Revenue','Track revenue by client, service line, project, VAT, and collection status.','Add revenue') + `<div class="summary-strip"><div><span>Gross revenue</span><strong>${fmtMoney(totalRevenue())}</strong></div><div><span>Collected</span><strong>${fmtMoney(paidRevenue())}</strong></div><div><span>Open revenue</span><strong>${fmtMoney(totalRevenue()-paidRevenue())}</strong></div><div><span>VAT recorded</span><strong>${fmtMoney(sum(getRevenue(),'vat'))}</strong></div></div><section class="panel"><div class="panel-head"><div><span class="section-kicker">REVENUE REGISTER</span><h3>${rows.length} revenue records</h3></div>${dataTableToolbar()}</div><div class="table-wrap"><table id="dataTable"><thead><tr><th>Date</th><th>Client / Project</th><th>Category</th><th class="right">Revenue</th><th class="right">VAT</th><th>Status</th><th>Account</th><th></th></tr></thead><tbody>${rows.map(x=>`<tr data-search="${esc([x.client,x.project,x.category,x.status,x.account].join(' '))}"><td>${fmtDate(x.date)}</td><td><strong>${esc(x.client)}</strong><small>${esc(x.project)}</small></td><td>${esc(x.category)}</td><td class="right money">${fmtMoney(x.amount)}</td><td class="right money muted-text">${fmtMoney(x.vat)}</td><td>${statusBadge(x.status)}</td><td>${esc(x.account)}</td><td><button class="row-action" title="Edit" data-edit="revenue" data-id="${x.id}">${ICON_EDIT}</button><button class="row-action danger-action" title="Delete" data-delete="revenue" data-id="${x.id}">${ICON_TRASH}</button></td></tr>`).join('')||`<tr><td colspan="8">${emptyState()}</td></tr>`}</tbody></table></div></section>`;
+    }
+    function renderExpenses(){
+      const rows=getExpenses().slice().sort((a,b)=>b.date.localeCompare(a.date));
+      return toolbar('Expenses','Monitor operational spend, direct costs, vendors, and payment status.','Add expense') + `<div class="summary-strip"><div><span>Operating expenses</span><strong>${fmtMoney(totalExpenses())}</strong></div><div><span>Direct costs</span><strong>${fmtMoney(directCosts())}</strong></div><div><span>Payroll</span><strong>${fmtMoney(totalPayroll())}</strong></div><div><span>Total cost</span><strong>${fmtMoney(totalExpenses()+totalPayroll())}</strong></div></div><section class="panel"><div class="panel-head"><div><span class="section-kicker">EXPENSE REGISTER</span><h3>${rows.length} expense records</h3></div>${dataTableToolbar()}</div><div class="table-wrap"><table id="dataTable"><thead><tr><th>Date</th><th>Vendor</th><th>Category</th><th>Type</th><th class="right">Amount</th><th>Status</th><th>Account</th><th></th></tr></thead><tbody>${rows.map(x=>`<tr data-search="${esc([x.vendor,x.category,x.type,x.status,x.account].join(' '))}"><td>${fmtDate(x.date)}</td><td><strong>${esc(x.vendor)}</strong><small>${esc(x.notes||'')}</small></td><td>${esc(x.category)}</td><td>${x.type==='Direct Cost'?`<span class="badge info">Direct cost</span>`:`<span class="badge muted">Opex</span>`}</td><td class="right money">${fmtMoney(x.amount)}</td><td>${statusBadge(x.status)}</td><td>${esc(x.account)}</td><td><button class="row-action" title="Edit" data-edit="expenses" data-id="${x.id}">${ICON_EDIT}</button><button class="row-action danger-action" title="Delete" data-delete="expenses" data-id="${x.id}">${ICON_TRASH}</button></td></tr>`).join('')||`<tr><td colspan="8">${emptyState()}</td></tr>`}</tbody></table></div></section>`;
+    }
+    function renderInvoices(){
+      const rows=getInvoices().slice().sort((a,b)=>b.date.localeCompare(a.date));
+      const overdue=rows.filter(x=>x.status==='Overdue').reduce((a,x)=>a+x.amount,0);
+      const pending=rows.filter(x=>x.status==='Pending').reduce((a,x)=>a+x.amount,0);
+      const paid=rows.filter(x=>x.status==='Paid').reduce((a,x)=>a+x.amount,0);
+      return toolbar('Invoices & AR','Receivables cockpit for invoice status, due dates, and collection exposure.','Create invoice') + `<div class="summary-strip"><div><span>Total invoiced</span><strong>${fmtMoney(sum(rows,'amount'))}</strong></div><div><span>Collected</span><strong>${fmtMoney(paid)}</strong></div><div><span>Pending</span><strong>${fmtMoney(pending)}</strong></div><div><span>Overdue</span><strong class="danger-text">${fmtMoney(overdue)}</strong></div></div><section class="panel"><div class="panel-head"><div><span class="section-kicker">ACCOUNTS RECEIVABLE</span><h3>Aging & collection</h3></div>${dataTableToolbar()}</div><div class="table-wrap"><table id="dataTable"><thead><tr><th>Invoice</th><th>Date</th><th>Client</th><th>Project</th><th class="right">Amount</th><th>Due</th><th>Status</th><th></th></tr></thead><tbody>${rows.map(x=>`<tr data-search="${esc([x.id,x.client,x.project,x.status].join(' '))}"><td><strong>${esc(x.id)}</strong></td><td>${fmtDate(x.date)}</td><td>${esc(x.client)}</td><td>${esc(x.project)}</td><td class="right money">${fmtMoney(x.amount)}</td><td>${fmtDate(x.due)}</td><td>${statusBadge(x.status)}</td><td><button class="row-action" title="Edit" data-edit="invoices" data-id="${x.id}">${ICON_EDIT}</button><button class="row-action danger-action" title="Delete" data-delete="invoices" data-id="${x.id}">${ICON_TRASH}</button></td></tr>`).join('')||`<tr><td colspan="8">${emptyState()}</td></tr>`}</tbody></table></div></section>`;
+    }
+    function renderCashflow(){
+      const months=getMonths(); const labels=months.map(monthLabel);
+      const inflow=months.map(m=>getTransactions().filter(x=>x.date.startsWith(m)&&x.direction==='Inflow').reduce((a,x)=>a+x.amount,0));
+      const outflow=months.map(m=>getTransactions().filter(x=>x.date.startsWith(m)&&x.direction==='Outflow').reduce((a,x)=>a+x.amount,0));
+      const net= inflow.map((v,i)=>v-outflow[i]);
+      return toolbar('Cash Flow','Understand monthly inflows, outflows, and ending liquidity across company accounts.','Add cash entry') + `<div class="summary-strip"><div><span>Current cash</span><strong>${fmtMoney(cashBalance())}</strong></div><div><span>Cash inflow</span><strong>${fmtMoney(sum(inflow.map(v=>({v}),{}), 'v'))}</strong></div><div><span>Cash outflow</span><strong>${fmtMoney(outflow.reduce((a,b)=>a+b,0))}</strong></div><div><span>Net cash movement</span><strong class="${net.reduce((a,b)=>a+b,0)>=0?'':'danger-text'}">${fmtMoney(net.reduce((a,b)=>a+b,0))}</strong></div></div><div class="grid-2-1"><section class="panel panel-chart"><div class="panel-head"><div><span class="section-kicker">MONTHLY LIQUIDITY</span><h3>Net cash movement</h3></div><span class="panel-note">FY ${state.data.settings.year}</span></div>${chartLine(net,labels)}</section><section class="panel"><div class="panel-head"><div><span class="section-kicker">ACCOUNTS</span><h3>Bank & cash balances</h3></div></div><div class="account-list">${state.data.accounts.map(a=>`<div class="account-row"><div class="account-avatar">${a.type==='Bank'?'BNK':'CASH'}</div><div><strong>${esc(a.name)}</strong><small>${esc(a.type)}</small></div><strong>${fmtMoney(a.balance)}</strong></div>`).join('')}</div></section></div><section class="panel"><div class="panel-head"><div><span class="section-kicker">CASH MOVEMENT</span><h3>Monthly cash flow detail</h3></div></div><div class="table-wrap"><table><thead><tr><th>Month</th><th class="right">Inflow</th><th class="right">Outflow</th><th class="right">Net</th></tr></thead><tbody>${months.map((m,i)=>`<tr><td><strong>${monthLabel(m)}</strong> ${state.data.settings.year}</td><td class="right money money-in">${fmtMoney(inflow[i])}</td><td class="right money money-out">${fmtMoney(outflow[i])}</td><td class="right money ${net[i]<0?'danger-text':''}">${fmtMoney(net[i])}</td></tr>`).join('')}</tbody></table></div></section>`;
+    }
+    function renderReports(){
+      const rev=totalRevenue(), direct=directCosts(), opex=getExpenses().filter(x=>x.type!=='Direct Cost').reduce((a,x)=>a+x.amount,0), payroll=totalPayroll();
+      const gross=rev-direct, op=gross-opex-payroll;
+      return toolbar('Reports','Board-ready financial reporting with P&L, cash position, and management metrics.','Export report') + `<div class="report-tabs"><button class="report-tab active" data-report="pnl">P&L</button><button class="report-tab" data-report="cash">Cash Flow</button><button class="report-tab" data-report="management">Management</button></div><div id="reportContent">${renderPnlReport(rev,direct,opex,payroll,gross,op)}</div>`;
+    }
+    function renderPnlReport(rev,direct,opex,payroll,gross,op){
+      return `<div class="report-grid"><section class="panel report-sheet"><div class="report-brand"><div class="brand-mark small">HMH</div><div><strong>${esc(state.data.settings.companyName)}</strong><span>Statement of Profit or Loss</span></div></div><div class="report-meta">For the year ending 31 December ${state.data.settings.year}</div><div class="report-lines"><div class="report-line section"><span>Revenue</span><strong>${fmtMoney(rev)}</strong></div><div class="report-line"><span>Direct costs</span><span>(${fmtMoney(direct)})</span></div><div class="report-line total"><span>Gross profit</span><strong>${fmtMoney(gross)}</strong></div><div class="report-line section"><span>Operating expenses</span><strong>${fmtMoney(opex+payroll)}</strong></div><div class="report-line"><span>Other operating expense</span><span>(${fmtMoney(opex)})</span></div><div class="report-line"><span>Payroll</span><span>(${fmtMoney(payroll)})</span></div><div class="report-line total highlight"><span>Operating profit</span><strong>${fmtMoney(op)}</strong></div></div></section><section class="panel"><div class="panel-head"><div><span class="section-kicker">MANAGEMENT KPIs</span><h3>Key ratios</h3></div></div><div class="ratio-grid"><div><span>Gross margin</span><strong>${rev?(gross/rev*100).toFixed(1):'0.0'}%</strong></div><div><span>Operating margin</span><strong>${rev?(op/rev*100).toFixed(1):'0.0'}%</strong></div><div><span>Payroll ratio</span><strong>${rev?(payroll/rev*100).toFixed(1):'0.0'}%</strong></div><div><span>Direct cost ratio</span><strong>${rev?(direct/rev*100).toFixed(1):'0.0'}%</strong></div></div><div class="report-callout"><strong>Management note</strong><span>Use the dashboard and project module to identify which client work is driving margin and where delivery costs are increasing.</span></div></section></div>`;
+    }
+    function renderProjects(){
+      const rows=state.data.projects.map(p=>({...p,profit:p.revenue-p.directCost-p.overhead,margin:p.revenue?(p.revenue-p.directCost-p.overhead)/p.revenue*100:0}));
+      return toolbar('Projects','Track project-level revenue, delivery cost, overhead allocation, and margin.','Add project') + `<div class="summary-strip"><div><span>Portfolio revenue</span><strong>${fmtMoney(sum(rows,'revenue'))}</strong></div><div><span>Gross project profit</span><strong>${fmtMoney(sum(rows,'profit'))}</strong></div><div><span>Portfolio margin</span><strong>${(sum(rows,'revenue')?sum(rows,'profit')/sum(rows,'revenue')*100:0).toFixed(1)}%</strong></div><div><span>Active projects</span><strong>${rows.filter(x=>x.status==='Active').length}</strong></div></div><section class="panel"><div class="panel-head"><div><span class="section-kicker">PROJECT PROFITABILITY</span><h3>${rows.length} projects</h3></div>${dataTableToolbar()}</div><div class="table-wrap"><table id="dataTable"><thead><tr><th>Project</th><th>Client</th><th class="right">Revenue</th><th class="right">Direct cost</th><th class="right">Overhead</th><th class="right">Profit</th><th>Margin</th><th>Status</th><th></th></tr></thead><tbody>${rows.map(x=>`<tr data-search="${esc([x.name,x.client,x.status].join(' '))}"><td><strong>${esc(x.name)}</strong><small>${esc(x.id)}</small></td><td>${esc(x.client)}</td><td class="right money">${fmtMoney(x.revenue)}</td><td class="right money">${fmtMoney(x.directCost)}</td><td class="right money">${fmtMoney(x.overhead)}</td><td class="right money ${x.profit<0?'danger-text':''}">${fmtMoney(x.profit)}</td><td><span class="margin-pill ${x.margin>=40?'high':x.margin>=20?'mid':'low'}">${x.margin.toFixed(1)}%</span></td><td>${statusBadge(x.status)}</td><td><button class="row-action" title="Edit" data-edit="projects" data-id="${x.id}">${ICON_EDIT}</button><button class="row-action danger-action" title="Delete" data-delete="projects" data-id="${x.id}">${ICON_TRASH}</button></td></tr>`).join('')}</tbody></table></div></section>`;
+    }
+    function renderPayroll(){
+      const rows=state.data.payroll.filter(x=>String(x.month).startsWith(String(state.data.settings.year))).slice().sort((a,b)=>b.month.localeCompare(a.month));
+      const gross=rows.reduce((a,x)=>a+x.base+x.allowance,0); const deductions=rows.reduce((a,x)=>a+x.deduction,0);
+      return toolbar('Payroll','Centralize salary, allowances, deductions, and monthly people cost.','Add payroll') + `<div class="summary-strip"><div><span>Gross payroll</span><strong>${fmtMoney(gross)}</strong></div><div><span>Deductions</span><strong>${fmtMoney(deductions)}</strong></div><div><span>Net paid</span><strong>${fmtMoney(gross-deductions)}</strong></div><div><span>Employees tracked</span><strong>${new Set(rows.map(x=>x.employee)).size}</strong></div></div><section class="panel"><div class="panel-head"><div><span class="section-kicker">PAYROLL REGISTER</span><h3>${rows.length} payroll records</h3></div>${dataTableToolbar()}</div><div class="table-wrap"><table id="dataTable"><thead><tr><th>Month</th><th>Employee</th><th>Role</th><th class="right">Base</th><th class="right">Allowance</th><th class="right">Deduction</th><th class="right">Net pay</th><th>Status</th><th></th></tr></thead><tbody>${rows.map(x=>`<tr data-search="${esc([x.month,x.employee,x.role,x.status].join(' '))}"><td>${esc(x.month)}</td><td><strong>${esc(x.employee)}</strong></td><td>${esc(x.role)}</td><td class="right money">${fmtMoney(x.base)}</td><td class="right money">${fmtMoney(x.allowance)}</td><td class="right money muted-text">${fmtMoney(x.deduction)}</td><td class="right money">${fmtMoney(x.base+x.allowance-x.deduction)}</td><td>${statusBadge(x.status)}</td><td><button class="row-action" title="Edit" data-edit="payroll" data-id="${x.id}">${ICON_EDIT}</button><button class="row-action danger-action" title="Delete" data-delete="payroll" data-id="${x.id}">${ICON_TRASH}</button></td></tr>`).join('')}</tbody></table></div></section>`;
+    }
+    function renderAssets(){
+      const rows=state.data.assets.filter(x=>String(x.date||'').startsWith(String(state.data.settings.year))).map(x=>({...x,annualDep:x.cost/x.usefulLife,monthlyDep:x.cost/x.usefulLife/12}));
+      return toolbar('Assets','Track fixed assets, useful life, depreciation assumptions, and carrying value.','Add asset') + `<div class="summary-strip"><div><span>Asset cost</span><strong>${fmtMoney(sum(rows,'cost'))}</strong></div><div><span>Annual depreciation</span><strong>${fmtMoney(sum(rows,'annualDep'))}</strong></div><div><span>Monthly depreciation</span><strong>${fmtMoney(sum(rows,'monthlyDep'))}</strong></div><div><span>Active assets</span><strong>${rows.filter(x=>x.status==='Active').length}</strong></div></div><section class="panel"><div class="panel-head"><div><span class="section-kicker">FIXED ASSET REGISTER</span><h3>${rows.length} assets</h3></div>${dataTableToolbar()}</div><div class="table-wrap"><table id="dataTable"><thead><tr><th>Asset</th><th>Date</th><th>Category</th><th class="right">Cost</th><th>Life</th><th class="right">Annual Dep.</th><th>Status</th><th></th></tr></thead><tbody>${rows.map(x=>`<tr data-search="${esc([x.name,x.category,x.status].join(' '))}"><td><strong>${esc(x.name)}</strong><small>${esc(x.id)}</small></td><td>${fmtDate(x.date)}</td><td>${esc(x.category)}</td><td class="right money">${fmtMoney(x.cost)}</td><td>${x.usefulLife} yrs</td><td class="right money">${fmtMoney(x.annualDep)}</td><td>${statusBadge(x.status)}</td><td><button class="row-action" title="Edit" data-edit="assets" data-id="${x.id}">${ICON_EDIT}</button><button class="row-action danger-action" title="Delete" data-delete="assets" data-id="${x.id}">${ICON_TRASH}</button></td></tr>`).join('')}</tbody></table></div></section>`;
+    }
+    function renderSettings(){
+      const s=state.data.settings;
+      const accountRows=state.data.accounts.map(a=>`<div class="account-row"><div class="account-avatar">${a.type==='Bank'?'BNK':a.type==='Cash'?'CASH':'E-W'}</div><div><strong>${esc(a.name)}</strong><small>${esc(a.type)} • Opening ${fmtMoney(a.openingBalance)}</small></div><div style="display:flex;align-items:center;gap:4px"><strong>${fmtMoney(accountBalance(a.name))}</strong><button class="row-action" data-edit="accounts" data-id="${esc(a.id)}" title="Edit">${ICON_EDIT}</button><button class="row-action danger-action" data-delete="accounts" data-id="${esc(a.id)}" title="Delete">${ICON_TRASH}</button></div></div>`).join('');
+      return toolbar('Settings','Configure company profile, finance assumptions, Firebase workspace, and account structure.','Add account') + `<div class="settings-grid"><section class="panel"><div class="panel-head"><div><span class="section-kicker">COMPANY PROFILE</span><h3>Workspace</h3></div></div><form id="settingsForm" class="form-grid"><label><span>Company display name</span><input name="companyName" value="${esc(s.companyName)}"/></label><label><span>Legal name</span><input name="legalName" value="${esc(s.legalName)}"/></label><label><span>Currency</span><select name="currency"><option ${s.currency==='IDR'?'selected':''}>IDR</option><option ${s.currency==='USD'?'selected':''}>USD</option><option ${s.currency==='SGD'?'selected':''}>SGD</option><option ${s.currency==='MYR'?'selected':''}>MYR</option></select></label><label><span>Fiscal year</span><select name="year">${[2025,2026,2027,2028,2029].map(y=>`<option ${s.year===y?'selected':''}>${y}</option>`).join('')}</select></label><label><span>VAT / tax assumption (%)</span><input type="number" step="0.01" min="0" name="taxRate" value="${s.taxRate}"/></label><label><span>Management reserve (%)</span><input type="number" step="0.01" min="0" name="defaultReserveRate" value="${s.defaultReserveRate}"/></label><div class="form-actions"><button type="submit" class="btn btn-primary">${ICON_CHECK}<span>Save changes</span></button></div></form></section><section class="panel"><div class="panel-head"><div><span class="section-kicker">FIREBASE CLOUD</span><h3>Workspace connection</h3></div></div><div class="security-note"><div class="security-icon">${ICON_SETTINGS}</div><div><strong>${esc(state.user?.email||'Not signed in')}</strong><p>Workspace: <b>${COMPANY_ID}</b><br>Data sync: ${state.ready?'Live through Cloud Firestore':'Connecting…'}<br>Authentication: Firebase Email/Password</p></div></div><div class="settings-actions"><button class="setting-action" data-action="toggle-theme"><span class="setting-icon">${s.theme==='dark'?ICON_SUN:ICON_MOON}</span><div><strong>${s.theme==='dark'?'Switch to light mode':'Switch to dark mode'}</strong><small>HMH navy + yellow presentation</small></div>${ICON_CHEVRON}</button><button class="setting-action" data-action="export-json"><span class="setting-icon">${ICON_DOWNLOAD}</span><div><strong>Backup finance data</strong><small>Download a JSON copy of the current Firebase workspace</small></div>${ICON_CHEVRON}</button><button class="setting-action" data-action="import-json"><span class="setting-icon">${ICON_RECEIPT}</span><div><strong>Restore from backup</strong><small>Replace the current Firebase workspace with a JSON backup</small></div>${ICON_CHEVRON}</button><button class="setting-action danger" data-action="reset-data"><span class="setting-icon">${ICON_TRASH}</span><div><strong>Reset workspace</strong><small>Delete finance records and restore default accounts</small></div>${ICON_CHEVRON}</button><button class="setting-action" data-action="logout"><span class="setting-icon">${ICON_CLOSE}</span><div><strong>Sign out</strong><small>End this Firebase session on this device</small></div>${ICON_CHEVRON}</button></div></section></div><section class="panel"><div class="panel-head"><div><span class="section-kicker">ACCOUNT STRUCTURE</span><h3>Bank & cash accounts</h3></div><button class="btn btn-secondary" data-action="add-account">${ICON_PLUS}<span>Add account</span></button></div><div class="account-list">${accountRows||emptyState('No accounts','Create a bank, cash, or e-wallet account to begin tracking liquidity.')}</div></section>`;
+    }
+
+    function bindPageEvents(){
+      const search=document.getElementById('tableSearch'); if(search){search.addEventListener('input',()=>{const q=search.value.toLowerCase();document.querySelectorAll('#dataTable tbody tr').forEach(tr=>{tr.style.display=(tr.dataset.search||tr.textContent).toLowerCase().includes(q)?'':'none';});});}
+      document.querySelectorAll('[data-route]').forEach(el=>el.addEventListener('click',()=>{state.route=el.dataset.route;render();}));
+      document.querySelectorAll('[data-action="add-record"]').forEach(b=>b.addEventListener('click',()=>openRecordModal(state.route)));
+      document.querySelectorAll('[data-action="quick-add"]').forEach(b=>b.addEventListener('click',()=>openRecordModal('transactions')));
+      document.querySelectorAll('[data-action="add-account"]').forEach(b=>b.addEventListener('click',()=>openRecordModal('accounts')));
+      document.querySelectorAll('[data-action="export-current"]').forEach(b=>b.addEventListener('click',()=>exportCurrentTable()));
+      document.querySelectorAll('[data-action="export-csv"]').forEach(b=>b.addEventListener('click',()=>downloadCsv(getTransactions(),'transactions')));
+      document.querySelectorAll('[data-action="toggle-theme"]').forEach(b=>b.addEventListener('click',toggleTheme));
+      document.querySelectorAll('[data-action="export-json"]').forEach(b=>b.addEventListener('click',exportJson));
+      document.querySelectorAll('[data-action="import-json"]').forEach(b=>b.addEventListener('click',()=>document.getElementById('importFile').click()));
+      document.querySelectorAll('[data-action="reset-data"]').forEach(b=>b.addEventListener('click',resetData));
+      document.querySelectorAll('[data-action="logout"]').forEach(b=>b.addEventListener('click',()=>signOut(auth)));
+      document.querySelectorAll('[data-action="filter-toggle"]').forEach(b=>b.addEventListener('click',()=>toast('Use the search field to filter the current register','info')));
+      document.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>openRecordModal(b.dataset.edit,b.dataset.id)));
+      document.querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>deleteRecord(b.dataset.delete,b.dataset.id)));
+      document.querySelectorAll('.report-tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.report-tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');const rev=totalRevenue(),direct=directCosts(),opex=getExpenses().filter(x=>x.type!=='Direct Cost').reduce((a,x)=>a+x.amount,0),payroll=totalPayroll();document.getElementById('reportContent').innerHTML=b.dataset.report==='pnl'?renderPnlReport(rev,direct,opex,payroll,rev-direct,rev-direct-opex-payroll):b.dataset.report==='cash'?renderCashReport():renderManagementReport();}));
+      const sf=document.getElementById('settingsForm'); if(sf) sf.addEventListener('submit',async e=>{e.preventDefault();try{const fd=new FormData(sf);await saveSettings({companyName:fd.get('companyName'),legalName:fd.get('legalName'),currency:fd.get('currency'),year:Number(fd.get('year')),taxRate:Number(fd.get('taxRate')),defaultReserveRate:Number(fd.get('defaultReserveRate'))});render();}catch(err){toast(firebaseErrorMessage(err),'danger');}});
+    }
+
+    function renderCashReport(){ const months=getMonths(); const inflow=months.map(m=>getTransactions().filter(x=>x.date.startsWith(m)&&x.direction==='Inflow').reduce((a,x)=>a+x.amount,0)); const outflow=months.map(m=>getTransactions().filter(x=>x.date.startsWith(m)&&x.direction==='Outflow').reduce((a,x)=>a+x.amount,0)); const net=inflow.map((x,i)=>x-outflow[i]); return `<div class="report-grid"><section class="panel panel-chart"><div class="panel-head"><div><span class="section-kicker">CASH REPORT</span><h3>Monthly net cash</h3></div></div>${chartLine(net,months.map(monthLabel))}</section><section class="panel"><div class="panel-head"><div><span class="section-kicker">LIQUIDITY</span><h3>Current position</h3></div></div><div class="big-metric">${fmtMoney(cashBalance())}<span>Current cash balance</span></div><div class="ratio-grid"><div><span>Open AR</span><strong>${fmtMoney(totalAR(),true)}</strong></div><div><span>Paid revenue</span><strong>${fmtMoney(paidRevenue(),true)}</strong></div><div><span>Paid expenses</span><strong>${fmtMoney(paidExpenses(),true)}</strong></div><div><span>Net cash movement</span><strong>${fmtMoney(net.reduce((a,b)=>a+b,0),true)}</strong></div></div></section></div>`; }
+    function renderManagementReport(){ return `<div class="management-grid"><div class="management-card"><span>Revenue</span><strong>${fmtMoney(totalRevenue())}</strong><small>YTD</small></div><div class="management-card"><span>Operating profit</span><strong>${fmtMoney(opProfit())}</strong><small>${margin().toFixed(1)}% margin</small></div><div class="management-card"><span>Cash</span><strong>${fmtMoney(cashBalance())}</strong><small>Across ${state.data.accounts.length} accounts</small></div><div class="management-card"><span>AR exposure</span><strong>${fmtMoney(totalAR())}</strong><small>${getInvoices().filter(x=>x.status==='Overdue').length} overdue invoice(s)</small></div></div><section class="panel"><div class="panel-head"><div><span class="section-kicker">MANAGEMENT FOCUS</span><h3>Areas to review</h3></div></div><div class="focus-list"><div><span class="focus-dot warning"></span><div><strong>Receivable exposure</strong><p>${fmtMoney(totalAR())} remains open across current invoices.</p></div></div><div><span class="focus-dot yellow"></span><div><strong>Project margin</strong><p>Review active projects with margins below 20% before adding delivery scope.</p></div></div><div><span class="focus-dot blue"></span><div><strong>Cash visibility</strong><p>Keep account balances reconciled with your external bank statements.</p></div></div></div></section>`; }
+
+
+    function accountBalance(accountName){
+      const acc=state.data.accounts.find(a=>a.name===accountName);
+      const opening=Number(acc?.openingBalance||0);
+      const movement=(state.data.transactions||[]).filter(t=>t.account===accountName).reduce((a,t)=>a+(t.direction==='Inflow'?1:-1)*Number(t.amount||0),0);
+      return opening+movement;
+    }
+
+    function linkedTransactionFor(route,obj){
+      if(route==='revenue' && obj.status==='Paid') return {date:obj.date,description:`${obj.client} — ${obj.project}`,category:obj.category,direction:'Inflow',amount:Number(obj.amount||0),account:obj.account,reference:obj.id};
+      if(route==='expenses' && obj.status==='Paid') return {date:obj.date,description:obj.vendor,category:obj.category,direction:'Outflow',amount:Number(obj.amount||0),account:obj.account,reference:obj.id};
+      if(route==='payroll' && obj.status==='Paid') return {date:`${obj.month}-01`,description:`Payroll — ${obj.employee}`,category:'Payroll',direction:'Outflow',amount:Number(obj.base||0)+Number(obj.allowance||0)-Number(obj.deduction||0),account:obj.account||state.data.accounts[0]?.name||'',reference:obj.id};
+      return null;
+    }
+
+    async function saveRecord(route,obj,existing=null){
+      const batch=writeBatch(db);
+      if(route==='accounts'){
+        const id=obj.id || uid('ACC');
+        batch.set(accountRef(id),{...obj,id});
+      }else{
+        const id=obj.id || uid(route.slice(0,3).toUpperCase());
+        obj.id=id;
+        batch.set(recordRef(id),{...obj,module:route,id});
+        if(['revenue','expenses','payroll'].includes(route)){
+          const oldLinked=getTransactions().concat(state.data.transactions||[]).find(t=>t.reference===(existing?.id||obj.id));
+          const next=linkedTransactionFor(route,obj);
+          if(oldLinked && !next) batch.delete(recordRef(oldLinked.id));
+          if(next){
+            const txId=oldLinked?.id || uid('TRX');
+            batch.set(recordRef(txId),{...next,module:'transactions',id:txId});
+          }
+        }
+      }
+      await batch.commit();
+      toast(existing?'Record updated':'Record created','success');
+    }
+
+    async function deleteRecord(route,id){
+      if(!db) return;
+      const coll=route==='accounts'?state.data.accounts:state.data[route]; const obj=coll?.find(x=>x.id===id); if(!obj) return;
+      if(!confirm(`Delete ${id}? This action cannot be undone.`)) return;
+      try{
+        const batch=writeBatch(db);
+        if(route==='accounts'){
+          if(getTransactions().some(t=>t.account===obj.name)){ toast('Account cannot be deleted while transactions reference it.','warning'); return; }
+          batch.delete(accountRef(id));
+        }else{
+          batch.delete(recordRef(id));
+          if(['revenue','expenses','payroll'].includes(route)){
+            const linked=getTransactions().find(t=>t.reference===id); if(linked) batch.delete(recordRef(linked.id));
+          }
+        }
+        await batch.commit(); toast('Record deleted','success');
+      }catch(err){toast(firebaseErrorMessage(err),'danger');}
+    }
+
+    function openRecordModal(route,id=null){
+      state.editId=id;
+      const existing = id ? (route==='accounts'?state.data.accounts:state.data[route])?.find(x=>x.id===id) : null;
+      const schemas={
+        accounts:{title:id?'Edit account':'Add account',fields:[['id','Account ID','text',existing?.id||uid('ACC')],['name','Account name','text',existing?.name||''],['type','Account type','select',existing?.type||'Bank',['Bank','Cash','E-Wallet']],['openingBalance','Opening balance','number',existing?.openingBalance||0]]},
+        transactions:{title:id?'Edit transaction':'New transaction',fields:[['date','Date','date',existing?.date||new Date().toISOString().slice(0,10)],['description','Description','text',existing?.description||''],['category','Category','text',existing?.category||'Revenue'],['direction','Direction','select',existing?.direction||'Inflow',['Inflow','Outflow']],['amount','Amount','number',existing?.amount||0],['account','Account','select',existing?.account||state.data.accounts[0]?.name||'',state.data.accounts.map(a=>a.name)],['reference','Reference','text',existing?.reference||'']]},
+        revenue:{title:id?'Edit revenue':'Add revenue',fields:[['id','Revenue ID','text',existing?.id||uid('REV')],['date','Date','date',existing?.date||new Date().toISOString().slice(0,10)],['client','Client','text',existing?.client||''],['project','Project','text',existing?.project||''],['category','Service line','select',existing?.category||'Web Development',['Web Development','Digital Marketing','Design','Content Creation','Strategy','Other']],['amount','Revenue','number',existing?.amount||0],['vat','VAT / tax','number',existing?.vat||0],['status','Status','select',existing?.status||'Pending',['Paid','Pending']],['account','Account','select',existing?.account||state.data.accounts[0]?.name||'',state.data.accounts.map(a=>a.name)],['notes','Notes','textarea',existing?.notes||'']]},
+        expenses:{title:id?'Edit expense':'Add expense',fields:[['id','Expense ID','text',existing?.id||uid('EXP')],['date','Date','date',existing?.date||new Date().toISOString().slice(0,10)],['vendor','Vendor','text',existing?.vendor||''],['category','Category','select',existing?.category||'Software',['Software','Marketing','Freelancer','Utilities','Office','Travel','Equipment','Other']],['type','Type','select',existing?.type||'Operating Expense',['Operating Expense','Direct Cost','Capex']],['amount','Amount','number',existing?.amount||0],['status','Status','select',existing?.status||'Paid',['Paid','Pending']],['account','Account','select',existing?.account||state.data.accounts[0]?.name||'',state.data.accounts.map(a=>a.name)],['notes','Notes','textarea',existing?.notes||'']]},
+        invoices:{title:id?'Edit invoice':'Create invoice',fields:[['id','Invoice number','text',existing?.id||`INV-${state.data.settings.year}-${String(state.data.invoices.length+1).padStart(3,'0')}`],['date','Invoice date','date',existing?.date||new Date().toISOString().slice(0,10)],['due','Due date','date',existing?.due||new Date(Date.now()+14*86400000).toISOString().slice(0,10)],['client','Client','text',existing?.client||''],['project','Project','text',existing?.project||''],['amount','Amount','number',existing?.amount||0],['status','Status','select',existing?.status||'Pending',['Pending','Paid','Overdue']]]},
+        projects:{title:id?'Edit project':'Add project',fields:[['id','Project ID','text',existing?.id||uid('PRJ')],['client','Client','text',existing?.client||''],['name','Project name','text',existing?.name||''],['revenue','Contract value','number',existing?.revenue||0],['directCost','Direct cost','number',existing?.directCost||0],['overhead','Overhead allocation','number',existing?.overhead||0],['status','Status','select',existing?.status||'Active',['Active','Completed','At Risk','Draft']]]},
+        payroll:{title:id?'Edit payroll':'Add payroll',fields:[['id','Payroll ID','text',existing?.id||uid('PAY')],['month','Month','month',existing?.month||`${state.data.settings.year}-${String(new Date().getMonth()+1).padStart(2,'0')}`],['employee','Employee','text',existing?.employee||''],['role','Role','text',existing?.role||''],['base','Base salary','number',existing?.base||0],['allowance','Allowance','number',existing?.allowance||0],['deduction','Deduction','number',existing?.deduction||0],['account','Account','select',existing?.account||state.data.accounts[0]?.name||'',state.data.accounts.map(a=>a.name)],['status','Status','select',existing?.status||'Paid',['Paid','Pending']]]},
+        assets:{title:id?'Edit asset':'Add asset',fields:[['id','Asset ID','text',existing?.id||uid('AST')],['date','Purchase date','date',existing?.date||new Date().toISOString().slice(0,10)],['name','Asset name','text',existing?.name||''],['category','Category','select',existing?.category||'IT Equipment',['IT Equipment','Furniture','Production','Vehicle','Other']],['cost','Purchase cost','number',existing?.cost||0],['usefulLife','Useful life (years)','number',existing?.usefulLife||4],['method','Depreciation method','select',existing?.method||'Straight-line',['Straight-line']],['status','Status','select',existing?.status||'Active',['Active','Disposed']]],}
+      };
+      if(!schemas[route]) return;
+      const s=schemas[route];
+      const fields=s.fields.map(f=>{const [name,label,type,value,opts]=f;let input='';const readonly=(existing&&(name==='id'||(route==='accounts'&&name==='name'))) ? 'readonly' : '';if(type==='textarea')input=`<textarea name="${name}" rows="3">${esc(value)}</textarea>`;else if(type==='select')input=`<select name="${name}">${opts.map(o=>`<option ${String(value)===String(o)?'selected':''}>${esc(o)}</option>`).join('')}</select>`;else input=`<input name="${name}" type="${type}" value="${esc(value)}" ${type==='number'?'step="1" min="0"':''} ${readonly}/>`;return `<label><span>${esc(label)}</span>${input}</label>`;}).join('');
+      document.getElementById('modalRoot').innerHTML=`<div class="modal-backdrop" id="modalBackdrop"><div class="modal"><div class="modal-head"><div><span class="section-kicker">${esc(routes[route]?.eyebrow||'FINANCE')}</span><h3>${esc(s.title)}</h3></div><button class="icon-button subtle" data-modal-close>${ICON_CLOSE}</button></div><form id="recordForm" class="form-grid">${fields}<div class="modal-actions"><button type="button" class="btn btn-secondary" data-modal-close>Cancel</button><button class="btn btn-primary" type="submit">${ICON_CHECK}<span>${id?'Save changes':'Create record'}</span></button></div></form></div></div>`;
+      document.querySelectorAll('[data-modal-close]').forEach(b=>b.addEventListener('click',closeModal));
+      document.getElementById('recordForm').addEventListener('submit',async e=>{e.preventDefault();try{const fd=new FormData(e.target),obj={};for(const[k,v]of fd.entries())obj[k]=(e.target.elements[k]?.type==='number'?Number(v):v);if(route==='accounts'&&!obj.id)obj.id=uid('ACC');if(route!=='accounts'&&!obj.id)obj.id=uid(route.slice(0,3).toUpperCase());await saveRecord(route,obj,existing);closeModal();}catch(err){toast(firebaseErrorMessage(err),'danger');}});
+    }
+    function closeModal(){ document.getElementById('modalRoot').innerHTML=''; state.editId=null; }
+    async function toggleTheme(){
+      const next=state.data.settings.theme==='dark'?'light':'dark';
+      localStorage.setItem('hmh_theme',next); state.data.settings.theme=next; applyTheme(); render();
+    }
+
+    function exportJson(){
+      const payload={exportedAt:new Date().toISOString(),companyId:COMPANY_ID,settings:state.data.settings,accounts:state.data.accounts,revenue:state.data.revenue,expenses:state.data.expenses,invoices:state.data.invoices,transactions:state.data.transactions,projects:state.data.projects,payroll:state.data.payroll,assets:state.data.assets};
+      const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`hmh-finance-firebase-backup-${state.data.settings.year}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('Firebase workspace backup downloaded','success');
+    }
+
+    async function importJsonToFirebase(parsed){
+      if(!parsed?.settings) throw new Error('Invalid backup');
+      const batchDeletes=async(refSnap, refFactory)=>{let batch=writeBatch(db),count=0;for(const d of refSnap.docs){batch.delete(d.ref);if(++count===450){await batch.commit();batch=writeBatch(db);count=0;}}return {batch,count};};
+      const recSnap=await getDocs(recordsRef());
+      let batch=writeBatch(db),count=0;
+      for(const d of recSnap.docs){batch.delete(d.ref);if(++count===450){await batch.commit();batch=writeBatch(db);count=0;}}
+      if(count)await batch.commit();
+      const accSnap=await getDocs(accountsRef()); batch=writeBatch(db);count=0;
+      for(const d of accSnap.docs){batch.delete(d.ref);if(++count===450){await batch.commit();batch=writeBatch(db);count=0;}}
+      const importedAccounts=Array.isArray(parsed.accounts)?parsed.accounts:[];importedAccounts.forEach(a=>{const id=a.id||uid('ACC');batch.set(accountRef(id),{...a,id});count++;});
+      if(count)await batch.commit();
+      {const cleanSettings={...defaultSettings,...parsed.settings};delete cleanSettings.theme;await setDoc(settingsRef(),cleanSettings);}
+      batch=writeBatch(db);count=0;
+      for(const module of RECORD_MODULES){for(const x of (Array.isArray(parsed[module])?parsed[module]:[])){const id=x.id||uid(module.slice(0,3).toUpperCase());batch.set(recordRef(id),{...x,id,module});if(++count===450){await batch.commit();batch=writeBatch(db);count=0;}}}
+      if(count)await batch.commit();
+    }
+
+    function exportCurrentTable(){ const table=document.querySelector('#dataTable'); if(!table){toast('No table to export','warning');return;} const headers=[...table.querySelectorAll('thead th')].slice(0,-1).map(x=>x.textContent.trim()); const rows=[...table.querySelectorAll('tbody tr')].filter(x=>x.style.display!=='none').map(tr=>[...tr.querySelectorAll('td')].slice(0,-1).map(td=>td.innerText.trim().replace(/\n+/g,' '))); downloadCsv(rows.map(r=>Object.fromEntries(headers.map((h,i)=>[h,r[i]||'']))),state.route); }
+    function downloadCsv(rows,name){ if(!rows.length){toast('No data to export','warning');return;} const headers=Object.keys(rows[0]); const csv=[headers.join(','),...rows.map(r=>headers.map(h=>`"${String(r[h]??'').replace(/"/g,'""')}"`).join(','))].join('\n'); const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`hmh-${name}-${state.data.settings.year}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('CSV exported','success'); }
+
+    async function initFirebase(){
+      applyTheme();
+      if(!firebaseIsConfigured()){
+        showAuthScreen('',true);
+        setConnection('Firebase configuration required',false);
+        return;
+      }
+      try{
+        firebaseApp=initializeApp(FIREBASE_CONFIG); auth=getAuth(firebaseApp); db=getFirestore(firebaseApp);
+        document.getElementById('loginForm').addEventListener('submit',async e=>{e.preventDefault();const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPassword').value;const btn=e.target.querySelector('button');btn.disabled=true;btn.textContent='Signing in…';try{await signInWithEmailAndPassword(auth,email,password);document.getElementById('authAlert').hidden=true;}catch(err){document.getElementById('authAlert').hidden=false;document.getElementById('authAlert').textContent=firebaseErrorMessage(err);}finally{btn.disabled=false;btn.textContent='Sign in';}});
+        document.getElementById('resetPasswordBtn').addEventListener('click',async()=>{const email=document.getElementById('loginEmail').value.trim();if(!email){document.getElementById('authAlert').hidden=false;document.getElementById('authAlert').textContent='Enter your email first.';return;}try{await sendPasswordResetEmail(auth,email);toast('Password reset email sent','success');}catch(err){document.getElementById('authAlert').hidden=false;document.getElementById('authAlert').textContent=firebaseErrorMessage(err);}});
+        onAuthStateChanged(auth,async user=>{
+          if(!user){state.user=null;state.ready=false;clearSubscriptions();setConnection('Signed out',false);showAuthScreen();return;}
+          state.user=user;hideAuthScreen();document.querySelector('.user-chip-copy strong').textContent=user.email||'Finance User';document.querySelector('.user-chip-copy span').textContent='Firebase user';
+          try{await startRealtimeSync();}catch(err){console.error(err);showAuthScreen(firebaseErrorMessage(err));}
+        });
+      }catch(err){console.error(err);showAuthScreen(err.message||'Firebase initialization failed.',false);}
+    }
+
+    document.addEventListener('click',e=>{ const routeBtn=e.target.closest('[data-route]'); if(routeBtn){ state.route=routeBtn.dataset.route; render(); } });
+    document.getElementById('periodSelect').addEventListener('change',async e=>{ try{ await saveSettings({...state.data.settings,year:Number(e.target.value)}); render(); }catch(err){toast(firebaseErrorMessage(err),'danger');} });
+    document.getElementById('themeToggle').addEventListener('click',toggleTheme);
+    document.getElementById('exportDataBtn').addEventListener('click',exportJson);
+    document.getElementById('mobileNavBtn').addEventListener('click',openMobileNav);
+    document.getElementById('mobileOverlay').addEventListener('click',closeMobileNav);
+    document.getElementById('userMenuBtn').addEventListener('click',()=>{if(auth&&state.user)signOut(auth);});
+    function openMobileNav(){document.getElementById('sidebar').classList.add('open');document.getElementById('mobileOverlay').classList.add('show');}
+    function closeMobileNav(){document.getElementById('sidebar').classList.remove('open');document.getElementById('mobileOverlay').classList.remove('show');}
+    document.getElementById('importFile').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async()=>{try{const parsed=JSON.parse(r.result);await importJsonToFirebase(parsed);toast('Backup restored to Firebase','success');}catch(err){console.error(err);toast(firebaseErrorMessage(err),'danger');}};r.readAsText(f);e.target.value='';});
+
+    document.querySelectorAll('.nav-item').forEach(btn=>{const label=btn.querySelector('span')?.textContent?.trim()||btn.textContent.trim();btn.innerHTML=({dashboard:ICON_DASH,transactions:ICON_TX,revenue:ICON_REVENUE,expenses:ICON_EXPENSE,invoices:ICON_INVOICE,cashflow:ICON_CASH,reports:ICON_REPORT,projects:ICON_PROJECT,payroll:ICON_PAYROLL,assets:ICON_ASSET,settings:ICON_SETTINGS}[btn.dataset.route]||'')+'<span>'+label+'</span>';});
+    document.querySelector('.period-control > span').innerHTML=ICON_CALENDAR;
+    document.getElementById('themeToggle').innerHTML=ICON_SUN;
+    document.getElementById('exportDataBtn').innerHTML=ICON_DOWNLOAD;
+    document.getElementById('mobileNavBtn').innerHTML=ICON_MENU;
+    document.getElementById('userMenuBtn').querySelector('svg')?.remove();document.getElementById('userMenuBtn').insertAdjacentHTML('beforeend',ICON_CHEVRON);
+    showAuthScreen('',!firebaseIsConfigured());
+    initFirebase();
+  
+  </script>
+</body>
+</html>
