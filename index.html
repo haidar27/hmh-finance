@@ -33,6 +33,7 @@
 .firebase-status-detail{display:block;font-size:9px;color:#7f8ca1;margin-top:2px}
 @media(max-width:620px){.language-switcher .lang-btn span{display:none}.install-btn{min-width:40px;padding:0 9px}.install-btn .install-label{display:none}}
 
+.pin-modal{width:min(390px,100%);padding-bottom:8px}.pin-body{padding:8px 20px 20px}.pin-body p{margin:0 0 14px;color:var(--text-2);font-size:11px;line-height:1.55}.pin-input-wrap{display:flex;justify-content:center}.pin-input{width:100%;max-width:230px;height:52px;text-align:center;letter-spacing:.45em;font-size:22px;font-weight:900;border:1px solid var(--border);background:var(--surface-2);color:var(--text);border-radius:13px;outline:0}.pin-input:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(243,199,68,.12)}.pin-error{min-height:16px;margin-top:8px;text-align:center;color:var(--red);font-size:10px;font-weight:800}.pin-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}.pin-modal.shake{animation:pinShake .25s ease}@keyframes pinShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 </style>
 
 <style>
@@ -184,7 +185,7 @@
       'Cancel':'Batal','Save changes':'Simpan perubahan','Create record':'Buat catatan','Record updated':'Catatan diperbarui','Record created':'Catatan dibuat','Record deleted':'Catatan dihapus','Account cannot be deleted while transactions reference it.':'Akun tidak dapat dihapus selama masih direferensikan transaksi.','This action cannot be undone.':'Tindakan ini tidak dapat dibatalkan.','Use the search field to filter the current register':'Gunakan kolom pencarian untuk memfilter daftar saat ini','No data to export':'Tidak ada data untuk diekspor','No table to export':'Tidak ada tabel untuk diekspor','CSV exported':'CSV berhasil diekspor','Firebase workspace backup downloaded':'Cadangan ruang kerja Firebase berhasil diunduh','Backup restored to Firebase':'Cadangan berhasil dipulihkan ke Firebase','Workspace reset':'Ruang kerja direset','Settings saved':'Pengaturan disimpan',
       'Permission denied':'Akses ditolak','Firestore permission denied. Check your Firestore Security Rules and database access.':'Akses Firestore ditolak. Periksa Firestore Security Rules dan akses database.','Firestore is not fully configured. Open Firebase Console and create/enable Cloud Firestore.':'Firestore belum dikonfigurasi sepenuhnya. Buka Firebase Console lalu buat/aktifkan Cloud Firestore.','Firebase is temporarily unavailable. Check your connection and try again.':'Firebase sedang tidak tersedia. Periksa koneksi lalu coba lagi.','Firebase request failed.':'Permintaan Firebase gagal.','Firebase configuration is incomplete. The dashboard is shown, but cloud sync is unavailable.':'Konfigurasi Firebase belum lengkap. Dasbor tetap ditampilkan, tetapi sinkronisasi cloud tidak tersedia.','Configuration required':'Konfigurasi diperlukan','Install':'Instal','Install HMH Finance System':'Instal HMH Finance System','App installed':'Aplikasi berhasil diinstal','Install option is not available yet.':'Opsi instal belum tersedia.','Use Chrome menu → Install HMH Finance System when the option appears.':'Gunakan menu Chrome → Instal HMH Finance System saat opsinya muncul.','Install becomes available when Chrome makes the app installable.':'Instal akan tersedia saat Chrome menyatakan aplikasi dapat diinstal.',
       'Paid':'Dibayar','Completed':'Selesai','Active':'Aktif','Draft':'Draf','At Risk':'Berisiko','Disposed':'Dilepas','Overdue':'Jatuh tempo','Pending':'Menunggu','Operating Expense':'Beban operasional','Capex':'Capex','Bank':'Bank','Cash':'Kas','E-Wallet':'E-Wallet','E-W':'E-W',
-      'New transaction':'Transaksi baru','Edit transaction':'Edit transaksi','Edit revenue':'Edit pendapatan','Edit expense':'Edit pengeluaran','Edit invoice':'Edit faktur','Edit project':'Edit proyek','Edit payroll':'Edit penggajian','Edit asset':'Edit aset','Edit account':'Edit akun','Add transaction':'Tambah transaksi','Create invoice':'Buat faktur','Revenue ID':'ID pendapatan','Expense ID':'ID pengeluaran','Invoice number':'Nomor faktur','Invoice date':'Tanggal faktur','Due date':'Tanggal jatuh tempo','Service line':'Lini layanan','VAT / tax':'Pajak','Notes':'Catatan','Transaction ID':'ID transaksi','Reference':'Referensi','Direction':'Arah','Account ID':'ID akun','Account name':'Nama akun','Account type':'Jenis akun','Opening balance':'Saldo awal','Project ID':'ID proyek','Project name':'Nama proyek','Payroll ID':'ID penggajian','Month':'Bulan','Asset ID':'ID aset','Asset name':'Nama aset','Method':'Metode',
+      'Confirm edit':'Konfirmasi edit','Confirm delete':'Konfirmasi hapus','Enter the 4-digit PIN to edit this record.':'Masukkan PIN 4 digit untuk mengedit data ini.','Enter the 4-digit PIN to delete this record.':'Masukkan PIN 4 digit untuk menghapus data ini.','PIN must be 4 digits':'PIN harus terdiri dari 4 digit','Incorrect PIN':'PIN salah','Confirm':'Konfirmasi','SECURITY':'KEAMANAN','New transaction':'Transaksi baru','Edit transaction':'Edit transaksi','Edit revenue':'Edit pendapatan','Edit expense':'Edit pengeluaran','Edit invoice':'Edit faktur','Edit project':'Edit proyek','Edit payroll':'Edit penggajian','Edit asset':'Edit aset','Edit account':'Edit akun','Add transaction':'Tambah transaksi','Create invoice':'Buat faktur','Revenue ID':'ID pendapatan','Expense ID':'ID pengeluaran','Invoice number':'Nomor faktur','Invoice date':'Tanggal faktur','Due date':'Tanggal jatuh tempo','Service line':'Lini layanan','VAT / tax':'Pajak','Notes':'Catatan','Transaction ID':'ID transaksi','Reference':'Referensi','Direction':'Arah','Account ID':'ID akun','Account name':'Nama akun','Account type':'Jenis akun','Opening balance':'Saldo awal','Project ID':'ID proyek','Project name':'Nama proyek','Payroll ID':'ID penggajian','Month':'Bulan','Asset ID':'ID aset','Asset name':'Nama aset','Method':'Metode',
     };
     let language=localStorage.getItem('hmh_language')||'id';
     function t(value){ if(language!=='id'||value==null) return String(value??''); const s=String(value); return I18N_ID[s]||s; }
@@ -247,81 +248,17 @@
         year: 2026,
         taxRate: 11,
         defaultReserveRate: 10,
-        theme: 'dark',
-        openingCash: 125000000,
-        fiscalStart: 1,
+        theme: 'dark'
       },
-      accounts: [
-        {id:'ACC-001', name:'BCA Business Account', type:'Bank', balance:85000000},
-        {id:'ACC-002', name:'Mandiri Business Account', type:'Bank', balance:30000000},
-        {id:'ACC-003', name:'Petty Cash', type:'Cash', balance:10000000},
-      ],
-      revenue: [
-        {id:'REV-001',date:'2026-01-08',client:'Nexa Studio',project:'Website Revamp',category:'Web Development',amount:18000000,vat:1980000,status:'Paid',account:'BCA Business Account',notes:'Phase 1'},
-        {id:'REV-002',date:'2026-01-21',client:'Aruna Living',project:'Social Media Retainer',category:'Digital Marketing',amount:12500000,vat:1375000,status:'Paid',account:'Mandiri Business Account',notes:'January retainer'},
-        {id:'REV-003',date:'2026-02-10',client:'PT Karya Digital',project:'Brand Identity',category:'Design',amount:22000000,vat:2420000,status:'Paid',account:'BCA Business Account',notes:'Brand package'},
-        {id:'REV-004',date:'2026-02-19',client:'Nexa Studio',project:'SEO Retainer',category:'Digital Marketing',amount:15000000,vat:1650000,status:'Pending',account:'BCA Business Account',notes:'Invoice due'},
-        {id:'REV-005',date:'2026-03-05',client:'Luma Foods',project:'E-commerce Store',category:'Web Development',amount:32000000,vat:3520000,status:'Paid',account:'BCA Business Account',notes:'Milestone 1'},
-        {id:'REV-006',date:'2026-03-20',client:'Aruna Living',project:'Content Production',category:'Content Creation',amount:9500000,vat:1045000,status:'Pending',account:'Mandiri Business Account',notes:'March content'},
-        {id:'REV-007',date:'2026-04-07',client:'PT Karya Digital',project:'Campaign Launch',category:'Digital Marketing',amount:27500000,vat:3025000,status:'Paid',account:'BCA Business Account',notes:'Campaign launch'},
-      ],
-      expenses: [
-        {id:'EXP-001',date:'2026-01-03',vendor:'Adobe',category:'Software',type:'Operating Expense',amount:1850000,status:'Paid',account:'BCA Business Account',notes:'Creative Cloud'},
-        {id:'EXP-002',date:'2026-01-12',vendor:'Meta Ads',category:'Marketing',type:'Direct Cost',amount:4800000,status:'Paid',account:'BCA Business Account',notes:'Client campaign'},
-        {id:'EXP-003',date:'2026-01-31',vendor:'Freelance Designer',category:'Freelancer',type:'Direct Cost',amount:3500000,status:'Paid',account:'Mandiri Business Account',notes:'Client delivery'},
-        {id:'EXP-004',date:'2026-02-04',vendor:'Google Workspace',category:'Software',type:'Operating Expense',amount:1250000,status:'Paid',account:'BCA Business Account',notes:'Team plan'},
-        {id:'EXP-005',date:'2026-02-22',vendor:'Internet Provider',category:'Utilities',type:'Operating Expense',amount:900000,status:'Paid',account:'BCA Business Account',notes:'Office internet'},
-        {id:'EXP-006',date:'2026-03-15',vendor:'Freelance Developer',category:'Freelancer',type:'Direct Cost',amount:7800000,status:'Paid',account:'BCA Business Account',notes:'E-commerce build'},
-        {id:'EXP-007',date:'2026-04-02',vendor:'Canva Pro',category:'Software',type:'Operating Expense',amount:820000,status:'Paid',account:'Mandiri Business Account',notes:'Design tools'},
-        {id:'EXP-008',date:'2026-04-18',vendor:'Coworking Space',category:'Office',type:'Operating Expense',amount:4500000,status:'Paid',account:'Mandiri Business Account',notes:'Monthly office'},
-      ],
-      invoices: [
-        {id:'INV-2026-001',date:'2026-01-08',due:'2026-01-23',client:'Nexa Studio',project:'Website Revamp',amount:18000000,status:'Paid'},
-        {id:'INV-2026-002',date:'2026-01-21',due:'2026-02-05',client:'Aruna Living',project:'Social Media Retainer',amount:12500000,status:'Paid'},
-        {id:'INV-2026-003',date:'2026-02-10',due:'2026-02-25',client:'PT Karya Digital',project:'Brand Identity',amount:22000000,status:'Paid'},
-        {id:'INV-2026-004',date:'2026-02-19',due:'2026-03-06',client:'Nexa Studio',project:'SEO Retainer',amount:15000000,status:'Overdue'},
-        {id:'INV-2026-005',date:'2026-03-05',due:'2026-03-20',client:'Luma Foods',project:'E-commerce Store',amount:32000000,status:'Paid'},
-        {id:'INV-2026-006',date:'2026-03-20',due:'2026-04-04',client:'Aruna Living',project:'Content Production',amount:9500000,status:'Pending'},
-        {id:'INV-2026-007',date:'2026-04-07',due:'2026-04-22',client:'PT Karya Digital',project:'Campaign Launch',amount:27500000,status:'Paid'},
-      ],
-      projects: [
-        {id:'PRJ-001',client:'Nexa Studio',name:'Website Revamp',revenue:18000000,directCost:8200000,overhead:1500000,status:'Completed'},
-        {id:'PRJ-002',client:'Aruna Living',name:'Social Media Retainer',revenue:22000000,directCost:9500000,overhead:2200000,status:'Active'},
-        {id:'PRJ-003',client:'PT Karya Digital',name:'Brand Identity',revenue:22000000,directCost:7300000,overhead:1750000,status:'Completed'},
-        {id:'PRJ-004',client:'Luma Foods',name:'E-commerce Store',revenue:32000000,directCost:16800000,overhead:2800000,status:'Active'},
-        {id:'PRJ-005',client:'PT Karya Digital',name:'Campaign Launch',revenue:27500000,directCost:12000000,overhead:2100000,status:'Active'},
-      ],
-      payroll: [
-        {id:'PAY-001',month:'2026-01',employee:'Haidar Muttaqin Hakim',role:'Founder / Director',base:12000000,allowance:2500000,deduction:500000,status:'Paid'},
-        {id:'PAY-002',month:'2026-01',employee:'Alya Ramadhani',role:'Account Executive',base:7000000,allowance:1000000,deduction:250000,status:'Paid'},
-        {id:'PAY-003',month:'2026-01',employee:'Raka Pratama',role:'Developer',base:8500000,allowance:1000000,deduction:300000,status:'Paid'},
-        {id:'PAY-004',month:'2026-02',employee:'Haidar Muttaqin Hakim',role:'Founder / Director',base:12000000,allowance:2500000,deduction:500000,status:'Paid'},
-        {id:'PAY-005',month:'2026-02',employee:'Alya Ramadhani',role:'Account Executive',base:7000000,allowance:1000000,deduction:250000,status:'Paid'},
-        {id:'PAY-006',month:'2026-02',employee:'Raka Pratama',role:'Developer',base:8500000,allowance:1000000,deduction:300000,status:'Paid'},
-      ],
-      assets: [
-        {id:'AST-001',date:'2026-01-10',name:'MacBook Pro',category:'IT Equipment',cost:32000000,usefulLife:4,method:'Straight-line',status:'Active'},
-        {id:'AST-002',date:'2026-02-03',name:'Office Workstations',category:'Furniture',cost:18000000,usefulLife:5,method:'Straight-line',status:'Active'},
-        {id:'AST-003',date:'2026-03-02',name:'Camera + Lens Kit',category:'Production',cost:24000000,usefulLife:4,method:'Straight-line',status:'Active'},
-      ],
-      transactions: [
-        {id:'TRX-001',date:'2026-04-18',description:'Coworking Space',category:'Office',direction:'Outflow',amount:4500000,account:'Mandiri Business Account',reference:'EXP-008'},
-        {id:'TRX-002',date:'2026-04-07',description:'Campaign Launch — PT Karya Digital',category:'Revenue',direction:'Inflow',amount:27500000,account:'BCA Business Account',reference:'INV-2026-007'},
-        {id:'TRX-003',date:'2026-04-02',description:'Canva Pro',category:'Software',direction:'Outflow',amount:820000,account:'Mandiri Business Account',reference:'EXP-007'},
-        {id:'TRX-004',date:'2026-03-20',description:'Content Production — Aruna Living',category:'Revenue',direction:'Inflow',amount:9500000,account:'Mandiri Business Account',reference:'INV-2026-006'},
-        {id:'TRX-005',date:'2026-03-15',description:'Freelance Developer',category:'Freelancer',direction:'Outflow',amount:7800000,account:'BCA Business Account',reference:'EXP-006'},
-        {id:'TRX-006',date:'2026-03-05',description:'E-commerce Store — Luma Foods',category:'Revenue',direction:'Inflow',amount:32000000,account:'BCA Business Account',reference:'INV-2026-005'},
-        {id:'TRX-007',date:'2026-02-22',description:'Internet Provider',category:'Utilities',direction:'Outflow',amount:900000,account:'BCA Business Account',reference:'EXP-005'},
-        {id:'TRX-008',date:'2026-02-10',description:'Brand Identity — PT Karya Digital',category:'Revenue',direction:'Inflow',amount:22000000,account:'BCA Business Account',reference:'INV-2026-003'},
-      ],
-      budgets: [
-        {id:'BUD-001',month:'2026-01',category:'Software',budget:2500000},
-        {id:'BUD-002',month:'2026-01',category:'Marketing',budget:6000000},
-        {id:'BUD-003',month:'2026-01',category:'Payroll',budget:28000000},
-        {id:'BUD-004',month:'2026-02',category:'Software',budget:2500000},
-        {id:'BUD-005',month:'2026-02',category:'Office',budget:5000000},
-        {id:'BUD-006',month:'2026-03',category:'Freelancer',budget:10000000},
-      ]
+      accounts: [],
+      revenue: [],
+      expenses: [],
+      invoices: [],
+      projects: [],
+      payroll: [],
+      assets: [],
+      transactions: [],
+      budgets: []
     };
 
     // ==============================
@@ -342,10 +279,21 @@ const firebaseConfig = {
     const RECORD_MODULES = ['revenue','expenses','invoices','transactions','projects','payroll','assets'];
     const defaultSettings = { companyName:'HMH Group', legalName:'HMH Group', currency:'IDR', year:2026, taxRate:11, defaultReserveRate:10 };
     const defaultAccounts = [
-      {id:'ACC-001', name:'BCA Business Account', type:'Bank', openingBalance:85000000},
-      {id:'ACC-002', name:'Mandiri Business Account', type:'Bank', openingBalance:30000000},
-      {id:'ACC-003', name:'Petty Cash', type:'Cash', openingBalance:10000000}
+      {id:'ACC-001', name:'BCA Business Account', type:'Bank', openingBalance:0},
+      {id:'ACC-002', name:'Mandiri Business Account', type:'Bank', openingBalance:0},
+      {id:'ACC-003', name:'Petty Cash', type:'Cash', openingBalance:0}
     ];
+
+    const LEGACY_DEMO_RECORD_IDS = new Set([
+      'REV-001','REV-002','REV-003','REV-004','REV-005','REV-006','REV-007',
+      'EXP-001','EXP-002','EXP-003','EXP-004','EXP-005','EXP-006','EXP-007','EXP-008',
+      'INV-2026-001','INV-2026-002','INV-2026-003','INV-2026-004','INV-2026-005','INV-2026-006','INV-2026-007',
+      'PRJ-001','PRJ-002','PRJ-003','PRJ-004','PRJ-005',
+      'PAY-001','PAY-002','PAY-003','PAY-004','PAY-005','PAY-006',
+      'AST-001','AST-002','AST-003',
+      'TRX-001','TRX-002','TRX-003','TRX-004','TRX-005','TRX-006','TRX-007','TRX-008'
+    ]);
+    const ADMIN_PIN = '1234';
 
     const state = {
       data: { settings:{...defaultSettings}, accounts:[], revenue:[], expenses:[], invoices:[], transactions:[], projects:[], payroll:[], assets:[] },
@@ -486,6 +434,55 @@ const firebaseConfig = {
     function monthLabel(m){ const d=new Date(m+'-01T00:00:00'); return new Intl.DateTimeFormat(language==='id'?'id-ID':'en-US',{month:'short'}).format(d); }
     function esc(v){ return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
     function uid(prefix){ return prefix+'-'+Date.now().toString(36).toUpperCase().slice(-6); }
+    function sanitizeLegacyDemoData(data){
+      const next=deepClone(data||defaultData);
+      next.settings={...defaultSettings,...(next.settings||{})};
+      delete next.settings.openingCash;
+      delete next.settings.fiscalStart;
+      const legacyAccountBalances={'ACC-001':85000000,'ACC-002':30000000,'ACC-003':10000000};
+      next.accounts=Array.isArray(next.accounts)?next.accounts.map(a=>{
+        if(Object.prototype.hasOwnProperty.call(legacyAccountBalances,a.id)){
+          const opening=Number(a.openingBalance||0), balance=Number(a.balance||0), legacy=legacyAccountBalances[a.id];
+          if(opening===legacy || balance===legacy) { const clean={...a,openingBalance:0}; delete clean.balance; return clean; }
+        }
+        return a;
+      }):[];
+      RECORD_MODULES.forEach(module=>{
+        next[module]=Array.isArray(next[module])?next[module].filter(x=>!LEGACY_DEMO_RECORD_IDS.has(x.id)):[];
+      });
+      next.budgets=Array.isArray(next.budgets)?next.budgets.filter(x=>!['BUD-001','BUD-002','BUD-003','BUD-004','BUD-005','BUD-006'].includes(x.id)):[];
+      return next;
+    }
+    async function cleanLegacyDemoData(){
+      if(!db) return;
+      try{
+        const sSnap=await getDoc(settingsRef());
+        if(sSnap.exists() && Number(sSnap.data()?.legacyDemoCleanupVersion||0)>=1) return;
+        const snap=await getDocs(recordsRef());
+        const stale=snap.docs.filter(d=>LEGACY_DEMO_RECORD_IDS.has(d.id));
+        if(stale.length){
+          let batch=writeBatch(db),count=0;
+          for(const d of stale){ batch.delete(d.ref); if(++count===450){ await batch.commit(); batch=writeBatch(db); count=0; }}
+          if(count) await batch.commit();
+        }
+        const accSnap=await getDocs(accountsRef());
+        let batch=writeBatch(db),count=0;
+        const legacyAccountBalances={'ACC-001':85000000,'ACC-002':30000000,'ACC-003':10000000};
+        for(const d of accSnap.docs){
+          const x=d.data();
+          if(Object.prototype.hasOwnProperty.call(legacyAccountBalances,d.id)){
+            const opening=Number(x.openingBalance||0),balance=Number(x.balance||0),legacy=legacyAccountBalances[d.id];
+            if(opening===legacy || balance===legacy){
+              const clean={...x,id:d.id,openingBalance:0}; delete clean.balance;
+              batch.set(d.ref,clean,{merge:true}); count++;
+            }
+          }
+          if(count===450){ await batch.commit(); batch=writeBatch(db); count=0; }
+        }
+        if(count) await batch.commit();
+        await setDoc(settingsRef(),{legacyDemoCleanupVersion:1},{merge:true});
+      }catch(err){ console.warn('Legacy demo cleanup skipped:',err); }
+    }
     function getMonths(){ return Array.from({length:12},(_,i)=>`${state.data.settings.year}-${String(i+1).padStart(2,'0')}`); }
     function sum(arr,key){ return arr.reduce((a,x)=>a+Number(x[key]||0),0); }
     function getRevenue(){ return state.data.revenue.filter(x=>String(x.date||'').startsWith(String(state.data.settings.year))); }
@@ -681,8 +678,8 @@ const firebaseConfig = {
       document.querySelectorAll('[data-action="import-json"]').forEach(b=>b.addEventListener('click',()=>document.getElementById('importFile').click()));
       document.querySelectorAll('[data-action="reset-data"]').forEach(b=>b.addEventListener('click',resetData));
       document.querySelectorAll('[data-action="filter-toggle"]').forEach(b=>b.addEventListener('click',()=>toast(t('Use the search field to filter the current register'),'info')));
-      document.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>openRecordModal(b.dataset.edit,b.dataset.id)));
-      document.querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>deleteRecord(b.dataset.delete,b.dataset.id)));
+      document.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>requireActionPin('edit',()=>openRecordModal(b.dataset.edit,b.dataset.id))));
+      document.querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>requireActionPin('delete',()=>deleteRecord(b.dataset.delete,b.dataset.id))));
       document.querySelectorAll('.report-tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.report-tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');const rev=totalRevenue(),direct=directCosts(),opex=getExpenses().filter(x=>x.type!=='Direct Cost').reduce((a,x)=>a+x.amount,0),payroll=totalPayroll();document.getElementById('reportContent').innerHTML=b.dataset.report==='pnl'?renderPnlReport(rev,direct,opex,payroll,rev-direct,rev-direct-opex-payroll):b.dataset.report==='cash'?renderCashReport():renderManagementReport();}));
       const sf=document.getElementById('settingsForm'); if(sf) sf.addEventListener('submit',async e=>{e.preventDefault();try{const fd=new FormData(sf);const year=Number(fd.get('year'));localStorage.setItem('hmh_year',String(year));state.data.settings.year=year;await saveSettings({companyName:fd.get('companyName'),legalName:fd.get('legalName'),currency:fd.get('currency'),taxRate:Number(fd.get('taxRate')),defaultReserveRate:Number(fd.get('defaultReserveRate'))});render();}catch(err){toast(firebaseErrorMessage(err),'danger');}});
     }
@@ -748,6 +745,27 @@ const firebaseConfig = {
       }catch(err){toast(firebaseErrorMessage(err),'danger');}
     }
 
+    function requireActionPin(action,onSuccess){
+      const title=action==='edit'?t('Confirm edit'):t('Confirm delete');
+      const message=action==='edit'?t('Enter the 4-digit PIN to edit this record.'):t('Enter the 4-digit PIN to delete this record.');
+      const modal=document.getElementById('modalRoot');
+      modal.innerHTML=`<div class="modal-backdrop" id="pinBackdrop"><div class="modal pin-modal"><div class="modal-head"><div><span class="section-kicker">${esc(t('SECURITY'))}</span><h3>${esc(title)}</h3></div><button class="icon-button subtle" type="button" data-pin-close>${ICON_CLOSE}</button></div><div class="pin-body"><p>${esc(message)}</p><div class="pin-input-wrap"><input id="actionPinInput" class="pin-input" type="password" inputmode="numeric" autocomplete="off" maxlength="4" aria-label="4-digit PIN"/></div><div id="pinError" class="pin-error"></div><div class="pin-actions"><button class="btn btn-secondary" type="button" data-pin-close>${esc(t('Cancel'))}</button><button class="btn btn-primary" type="button" id="pinConfirmBtn">${ICON_CHECK}<span>${esc(t('Confirm'))}</span></button></div></div></div></div>`;
+      const input=document.getElementById('actionPinInput'),error=document.getElementById('pinError'),box=document.querySelector('.pin-modal');
+      const close=()=>{modal.innerHTML='';};
+      document.querySelectorAll('[data-pin-close]').forEach(b=>b.addEventListener('click',close));
+      const verify=()=>{
+        const pin=input.value.trim();
+        if(!/^\d{4}$/.test(pin)){error.textContent=t('PIN must be 4 digits');box.classList.remove('shake');void box.offsetWidth;box.classList.add('shake');input.focus();return;}
+        if(pin!==ADMIN_PIN){error.textContent=t('Incorrect PIN');box.classList.remove('shake');void box.offsetWidth;box.classList.add('shake');input.select();return;}
+        close();
+        Promise.resolve(onSuccess()).catch(err=>toast(firebaseErrorMessage(err),'danger'));
+      };
+      input.addEventListener('input',()=>{input.value=input.value.replace(/\D/g,'').slice(0,4);error.textContent='';});
+      input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();verify();}if(e.key==='Escape')close();});
+      document.getElementById('pinConfirmBtn').addEventListener('click',verify);
+      input.focus();
+    }
+
     function openRecordModal(route,id=null){
       state.editId=id;
       const existing = id ? (route==='accounts'?state.data.accounts:state.data[route])?.find(x=>x.id===id) : null;
@@ -807,7 +825,8 @@ const firebaseConfig = {
       try{
         const raw=localStorage.getItem(LOCAL_SNAPSHOT_KEY); if(!raw) return false;
         const parsed=JSON.parse(raw); if(!parsed||!parsed.settings) return false;
-        state.data={...deepClone(defaultData),...parsed,settings:{...deepClone(defaultData.settings),...(parsed.settings||{})}};
+        state.data=sanitizeLegacyDemoData({...deepClone(defaultData),...parsed,settings:{...deepClone(defaultData.settings),...(parsed.settings||{})}});
+        saveLocalSnapshot();
         return true;
       }catch(_){return false;}
     }
@@ -828,6 +847,7 @@ const firebaseConfig = {
         firebaseApp=getApps().length?getApp():initializeApp(firebaseConfig);
         try{ await ensureAnonymousAuth(); }catch(authErr){ console.warn('Firebase Authentication:',authErr); }
         db=getFirestore(firebaseApp);
+        await cleanLegacyDemoData();
         await startRealtimeSync();
       }catch(err){
         console.error(err);
