@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id" class="notranslate" translate="no">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0a1730" />
   <meta name="description" content="HMH Finance System — finance command center for HMH Group." />
+  <meta name="google" content="notranslate" />
+  <meta name="googlebot" content="notranslate" />
+  <meta name="robots" content="notranslate" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="./manifest.webmanifest" />
   <title>HMH Finance System</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a1730'/%3E%3Cpath d='M14 14h8v14h20V14h8v36h-8V36H22v14h-8z' fill='%23f3c744'/%3E%3C/svg%3E" />
   <style>
@@ -15,6 +22,17 @@
 
 .danger-action{color:var(--red)}.danger-action:hover{background:rgba(214,94,99,.10);color:var(--red)}
 
+
+.language-switcher{display:flex;align-items:center;gap:4px;padding:3px;border:1px solid var(--border);background:var(--surface);border-radius:12px}
+.lang-btn{height:32px;min-width:42px;padding:0 8px;border:0;background:transparent;border-radius:9px;color:var(--text-3);display:inline-flex;align-items:center;justify-content:center;gap:5px;font-size:12px;font-weight:900;transition:.18s}
+.lang-btn:hover{color:var(--text);background:var(--surface-2)}
+.lang-btn.active{background:var(--navy);color:var(--yellow)}
+.install-btn{white-space:nowrap}
+.install-btn[hidden]{display:none}
+.install-btn .install-label{font-size:11px}
+.firebase-status-detail{display:block;font-size:9px;color:#7f8ca1;margin-top:2px}
+@media(max-width:620px){.language-switcher .lang-btn span{display:none}.install-btn{min-width:40px;padding:0 9px}.install-btn .install-label{display:none}}
+
 </style>
 
 <style>
@@ -22,7 +40,7 @@
 </style>
 </head>
 <body>
-  <div id="app" class="app-shell">
+  <div id="app" class="app-shell notranslate" translate="no">
     <aside class="sidebar" id="sidebar">
       <div class="brand">
         <div class="brand-mark">HMH</div>
@@ -88,6 +106,11 @@
               <option value="2025">FY 2025</option>
             </select>
           </div>
+          <div class="language-switcher" aria-label="Language selector">
+            <button class="lang-btn" data-language="id" aria-pressed="false" title="Bahasa Indonesia">🇮🇩<span>ID</span></button>
+            <button class="lang-btn" data-language="en" aria-pressed="false" title="English">🇬🇧<span>EN</span></button>
+          </div>
+          <button class="icon-button install-btn" id="installAppBtn" hidden aria-label="Install app" title="Install HMH Finance System">{ICON_DOWNLOAD}<span class="install-label">Install</span></button>
           <button class="icon-button" id="themeToggle" aria-label="Toggle theme" title="Toggle light/dark theme">{ICON_SUN}</button>
           <button class="icon-button" id="exportDataBtn" title="Export data as JSON">{ICON_DOWNLOAD}</button>
           <div class="user-chip" aria-label="Finance administrator">
@@ -107,7 +130,8 @@
   <input type="file" id="importFile" accept="application/json" hidden />
 
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js';
+    import { initializeApp, getApp, getApps } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js';
+    import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js';
     import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, onSnapshot, writeBatch } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js';
 
     const ICON_DASH = `<svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>`;
@@ -139,6 +163,67 @@
     const ICON_TRASH = `<svg viewBox="0 0 24 24"><path d="M5 7h14M10 11v6M14 11v6M8 7l1-3h6l1 3M7 7l1 14h8l1-14"/></svg>`;
     const ICON_EYE = `<svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="2.5"/></svg>`;
     const ICON_RECEIPT = `<svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-1.5L12 21l-3-1.5L6 21zM9 8h6M9 12h6M9 16h4"/></svg>`;
+
+    const I18N_ID = {
+'Firestore access was denied. Check your Firestore Security Rules and, if they require request.auth, enable Anonymous Authentication in Firebase Console.':'Akses Firestore ditolak. Periksa Firestore Security Rules dan, bila rules mensyaratkan request.auth, aktifkan Anonymous Authentication di Firebase Console.',      'Finance Admin':'Admin Keuangan','Language selector':'Pilih bahasa','CASH REPORT':'LAPORAN KAS','Monthly net cash':'Kas bersih bulanan','LIQUIDITY':'LIKUIDITAS','Current position':'Posisi saat ini','Current cash balance':'Saldo kas saat ini','Open AR':'Piutang terbuka','Paid revenue':'Pendapatan diterima','Paid expenses':'Pengeluaran dibayar','MANAGEMENT FOCUS':'FOKUS MANAJEMEN','Areas to review':'Area yang perlu ditinjau','Receivable exposure':'Eksposur piutang','AR exposure':'Eksposur piutang','Cash visibility':'Visibilitas kas','Current cash and bank balance':'Saldo kas dan bank saat ini','allocation':'alokasi','Storage':'Penyimpanan','Data sync':'Sinkronisasi data','Cloud access blocked':'Akses cloud diblokir','Cloud unavailable':'Cloud tidak tersedia','Firestore setup required':'Firestore belum siap','Cloud connection error':'Koneksi cloud bermasalah','Anonymous authentication is not enabled':'Autentikasi anonim belum diaktifkan','Enable Anonymous Authentication in Firebase Console to use authenticated Firestore rules.':'Aktifkan Anonymous Authentication di Firebase Console untuk menggunakan Firestore Rules berbasis autentikasi.',
+      'Dashboard':'Dasbor','Transactions':'Transaksi','Revenue':'Pendapatan','Expenses':'Pengeluaran','Invoices & AR':'Faktur & Piutang','Cash Flow':'Arus Kas','Reports':'Laporan','Projects':'Proyek','Payroll':'Penggajian','Assets':'Aset','Settings':'Pengaturan',
+      'OVERVIEW':'RINGKASAN','FINANCE':'KEUANGAN','OPERATIONS':'OPERASIONAL','Workspace':'Ruang Kerja','Finance Command Center':'PUSAT KENDALI KEUANGAN','GENERAL LEDGER':'BUKU BESAR','INCOME MANAGEMENT':'MANAJEMEN PENDAPATAN','SPEND MANAGEMENT':'MANAJEMEN PENGELUARAN','RECEIVABLES':'PIUTANG','LIQUIDITY MANAGEMENT':'MANAJEMEN LIKUIDITAS','FINANCIAL REPORTING':'PELAPORAN KEUANGAN','PROJECT PROFITABILITY':'PROFITABILITAS PROYEK','PEOPLE COSTS':'BIAYA SDM','FIXED ASSETS':'ASET TETAP','SYSTEM CONFIGURATION':'KONFIGURASI SISTEM',
+      'Reporting period':'Periode laporan','Finance administrator':'Administrator keuangan','Administrator':'Administrator','Open navigation':'Buka navigasi','Toggle theme':'Ubah tema','Export data as JSON':'Ekspor data sebagai JSON',
+      'Connecting to Firebase…':'Menghubungkan ke Firebase…','Syncing Firebase Cloud…':'Menyinkronkan Firebase Cloud…','Firebase Cloud • Live':'Firebase Cloud • Aktif','Cloud access blocked':'Akses cloud diblokir','Cloud unavailable':'Cloud tidak tersedia','Firestore setup required':'Firestore belum siap','Cloud connection error':'Koneksi cloud bermasalah','Configuration required':'Konfigurasi diperlukan','Local mode — cloud unavailable':'Mode lokal — cloud tidak tersedia',
+      'Good evening, HMH.':'Selamat sore, HMH.','Your finance cockpit is up to date. Monitor liquidity, profitability, and receivables from one place.':'Pusat kendali keuangan Anda sudah diperbarui. Pantau likuiditas, profitabilitas, dan piutang dari satu tempat.','New transaction':'Transaksi baru','Export CSV':'Ekspor CSV','Total Revenue':'Total Pendapatan','Operating Expenses':'Beban Operasional','Operating Profit':'Laba Operasional','Cash Balance':'Saldo Kas','Accounts Receivable':'Piutang Usaha','YTD':'YTD','Open invoices':'Faktur terbuka','Cost managed':'Biaya terkelola','Available liquidity':'Likuiditas tersedia','Outstanding':'Belum tertagih','YTD tracked':'Terpantau YTD','accounts':'akun','12-MONTH VIEW':'TAMPILAN 12 BULAN','Revenue performance':'Kinerja pendapatan','YTD revenue':'Pendapatan YTD','Revenue':'Pendapatan','Operating outflow':'Arus kas keluar operasional','(hover in Reports for detail)':'(lihat Laporan untuk detail)','SPEND MIX':'KOMPOSISI PENGELUARAN','Expense allocation':'Alokasi pengeluaran','No expenses':'Belum ada pengeluaran','Add your first expense to see allocation.':'Tambahkan pengeluaran pertama untuk melihat alokasinya.','RECENT ACTIVITY':'AKTIVITAS TERKINI','Latest transactions':'Transaksi terbaru','Date':'Tanggal','Description':'Deskripsi','Account':'Akun','Amount':'Nominal','PORTFOLIO':'PORTOFOLIO','Project profitability':'Profitabilitas proyek','Open projects':'Buka proyek','margin':'margin','No projects':'Belum ada proyek','No records found':'Tidak ada catatan','Add a record to start building your finance workspace.':'Tambahkan catatan untuk mulai membangun ruang kerja keuangan Anda.',
+      'General ledger view of cash activity across company accounts.':'Tampilan buku besar aktivitas kas di seluruh akun perusahaan.','Add record':'Tambah catatan','Export':'Ekspor','Filter':'Filter','Search records...':'Cari catatan…','entries':'entri','General ledger':'Buku besar','Inflow':'Kas masuk','Outflow':'Kas keluar','Edit':'Edit','Delete':'Hapus',
+      'Track revenue by client, service line, project, VAT, and collection status.':'Kelola pendapatan berdasarkan klien, lini layanan, proyek, pajak, dan status penagihan.','Add revenue':'Tambah pendapatan','Gross revenue':'Pendapatan bruto','Collected':'Tertagih','Open revenue':'Pendapatan terbuka','VAT recorded':'Pajak tercatat','REVENUE REGISTER':'DAFTAR PENDAPATAN','revenue records':'catatan pendapatan','Client / Project':'Klien / Proyek','Category':'Kategori','VAT':'Pajak','Status':'Status',
+      'Monitor operational spend, direct costs, vendors, and payment status.':'Pantau pengeluaran operasional, biaya langsung, vendor, dan status pembayaran.','Add expense':'Tambah pengeluaran','Operating expenses':'Pengeluaran operasional','Direct costs':'Biaya langsung','Payroll':'Penggajian','Total cost':'Total biaya','EXPENSE REGISTER':'DAFTAR PENGELUARAN','expense records':'catatan pengeluaran','Vendor':'Vendor','Type':'Jenis','Direct cost':'Biaya langsung','Opex':'Opex',
+      'Receivables cockpit for invoice status, due dates, and collection exposure.':'Pusat kendali piutang untuk status faktur, jatuh tempo, dan eksposur penagihan.','Create invoice':'Buat faktur','Total invoiced':'Total difakturkan','Pending':'Menunggu','Overdue':'Jatuh tempo','ACCOUNTS RECEIVABLE':'PIUTANG USAHA','Aging & collection':'Umur piutang & penagihan','Invoice':'Faktur','Due':'Jatuh tempo',
+      'Understand monthly inflows, outflows, and ending liquidity across company accounts.':'Pahami kas masuk, kas keluar, dan likuiditas akhir bulanan di seluruh akun perusahaan.','Add cash entry':'Tambah transaksi kas','Current cash':'Kas saat ini','Cash inflow':'Kas masuk','Cash outflow':'Kas keluar','Net cash movement':'Pergerakan kas bersih','MONTHLY LIQUIDITY':'LIKUIDITAS BULANAN','Net cash movement':'Pergerakan kas bersih','ACCOUNTS':'AKUN','Bank & cash balances':'Saldo bank & kas','CASH MOVEMENT':'PERGERAKAN KAS','Monthly cash flow detail':'Detail arus kas bulanan','Month':'Bulan','Net':'Bersih',
+      'Board-ready financial reporting with P&L, cash position, and management metrics.':'Pelaporan keuangan siap manajemen dengan laba rugi, posisi kas, dan metrik manajemen.','Export report':'Ekspor laporan','Cash Flow':'Arus Kas','Management':'Manajemen','Statement of Profit or Loss':'Laporan Laba Rugi','For the year ending 31 December':'Untuk tahun yang berakhir 31 Desember','Direct costs':'Biaya langsung','Gross profit':'Laba kotor','Operating expenses':'Beban operasional','Other operating expense':'Beban operasional lainnya','Payroll':'Penggajian','Operating profit':'Laba operasional','MANAGEMENT KPIs':'KPI MANAJEMEN','Key ratios':'Rasio utama','Gross margin':'Margin kotor','Operating margin':'Margin operasional','Payroll ratio':'Rasio penggajian','Direct cost ratio':'Rasio biaya langsung','Management note':'Catatan manajemen','Use the dashboard and project module to identify which client work is driving margin and where delivery costs are increasing.':'Gunakan dasbor dan modul proyek untuk melihat pekerjaan klien yang mendorong margin dan area kenaikan biaya pengiriman.',
+      'Track project-level revenue, delivery cost, overhead allocation, and margin.':'Pantau pendapatan proyek, biaya pengerjaan, alokasi overhead, dan margin.','Add project':'Tambah proyek','Portfolio revenue':'Pendapatan portofolio','Gross project profit':'Laba proyek bruto','Portfolio margin':'Margin portofolio','Active projects':'Proyek aktif','PROJECT PROFITABILITY':'PROFITABILITAS PROYEK','projects':'proyek','Project':'Proyek','Client':'Klien','Contract value':'Nilai kontrak','Direct cost':'Biaya langsung','Overhead':'Overhead','Profit':'Laba','Margin':'Margin',
+      'Centralize salary, allowances, deductions, and monthly people cost.':'Pusatkan gaji, tunjangan, potongan, dan biaya SDM bulanan.','Add payroll':'Tambah penggajian','Gross payroll':'Penggajian bruto','Deductions':'Potongan','Net paid':'Dibayar bersih','Employees tracked':'Karyawan terdata','PAYROLL REGISTER':'DAFTAR PENGGAJIAN','payroll records':'catatan penggajian','Employee':'Karyawan','Role':'Jabatan','Base':'Gaji pokok','Allowance':'Tunjangan','Deduction':'Potongan','Net pay':'Gaji bersih',
+      'Track fixed assets, useful life, depreciation assumptions, and carrying value.':'Pantau aset tetap, umur manfaat, asumsi penyusutan, dan nilai tercatat.','Add asset':'Tambah aset','Asset cost':'Biaya aset','Annual depreciation':'Penyusutan tahunan','Monthly depreciation':'Penyusutan bulanan','Active assets':'Aset aktif','FIXED ASSET REGISTER':'DAFTAR ASET TETAP','assets':'aset','Asset':'Aset','Life':'Umur','Annual Dep.':'Penyusutan Tahunan','Purchase date':'Tanggal pembelian','Purchase cost':'Harga perolehan','Useful life (years)':'Umur manfaat (tahun)','Depreciation method':'Metode penyusutan','Disposed':'Dilepas',
+      'Configure company profile, finance assumptions, Firebase workspace, and account structure.':'Atur profil perusahaan, asumsi keuangan, ruang kerja Firebase, dan struktur akun.','Add account':'Tambah akun','COMPANY PROFILE':'PROFIL PERUSAHAAN','Workspace':'Ruang kerja','Company display name':'Nama tampilan perusahaan','Legal name':'Nama legal','Currency':'Mata uang','Fiscal year':'Tahun fiskal','VAT / tax assumption (%)':'Asumsi pajak (%)','Management reserve (%)':'Cadangan manajemen (%)','FIREBASE CLOUD':'FIREBASE CLOUD','Workspace connection':'Koneksi ruang kerja','HMH Group Finance Workspace':'Ruang Kerja Keuangan HMH Group','Live through Cloud Firestore':'Aktif melalui Cloud Firestore','Connecting…':'Menghubungkan…','Storage: Cloud Firestore':'Penyimpanan: Cloud Firestore','Switch to light mode':'Beralih ke mode terang','Switch to dark mode':'Beralih ke mode gelap','HMH navy + yellow presentation':'Tampilan HMH navy + kuning','Backup finance data':'Cadangkan data keuangan','Download a JSON copy of the current Firebase workspace':'Unduh salinan JSON dari ruang kerja Firebase saat ini','Restore from backup':'Pulihkan dari cadangan','Replace the current Firebase workspace with a JSON backup':'Ganti ruang kerja Firebase saat ini dengan cadangan JSON','Reset workspace':'Reset ruang kerja','Delete finance records and restore default accounts':'Hapus catatan keuangan dan pulihkan akun default','ACCOUNT STRUCTURE':'STRUKTUR AKUN','Bank & cash accounts':'Akun bank & kas','Opening':'Saldo awal','No accounts':'Belum ada akun','Create a bank, cash, or e-wallet account to begin tracking liquidity.':'Buat akun bank, kas, atau e-wallet untuk mulai melacak likuiditas.',
+      'Cancel':'Batal','Save changes':'Simpan perubahan','Create record':'Buat catatan','Record updated':'Catatan diperbarui','Record created':'Catatan dibuat','Record deleted':'Catatan dihapus','Account cannot be deleted while transactions reference it.':'Akun tidak dapat dihapus selama masih direferensikan transaksi.','This action cannot be undone.':'Tindakan ini tidak dapat dibatalkan.','Use the search field to filter the current register':'Gunakan kolom pencarian untuk memfilter daftar saat ini','No data to export':'Tidak ada data untuk diekspor','No table to export':'Tidak ada tabel untuk diekspor','CSV exported':'CSV berhasil diekspor','Firebase workspace backup downloaded':'Cadangan ruang kerja Firebase berhasil diunduh','Backup restored to Firebase':'Cadangan berhasil dipulihkan ke Firebase','Workspace reset':'Ruang kerja direset','Settings saved':'Pengaturan disimpan',
+      'Permission denied':'Akses ditolak','Firestore permission denied. Check your Firestore Security Rules and database access.':'Akses Firestore ditolak. Periksa Firestore Security Rules dan akses database.','Firestore is not fully configured. Open Firebase Console and create/enable Cloud Firestore.':'Firestore belum dikonfigurasi sepenuhnya. Buka Firebase Console lalu buat/aktifkan Cloud Firestore.','Firebase is temporarily unavailable. Check your connection and try again.':'Firebase sedang tidak tersedia. Periksa koneksi lalu coba lagi.','Firebase request failed.':'Permintaan Firebase gagal.','Firebase configuration is incomplete. The dashboard is shown, but cloud sync is unavailable.':'Konfigurasi Firebase belum lengkap. Dasbor tetap ditampilkan, tetapi sinkronisasi cloud tidak tersedia.','Configuration required':'Konfigurasi diperlukan','Install':'Instal','Install HMH Finance System':'Instal HMH Finance System','App installed':'Aplikasi berhasil diinstal','Install option is not available yet.':'Opsi instal belum tersedia.','Use Chrome menu → Install HMH Finance System when the option appears.':'Gunakan menu Chrome → Instal HMH Finance System saat opsinya muncul.','Install becomes available when Chrome makes the app installable.':'Instal akan tersedia saat Chrome menyatakan aplikasi dapat diinstal.',
+      'Paid':'Dibayar','Completed':'Selesai','Active':'Aktif','Draft':'Draf','At Risk':'Berisiko','Disposed':'Dilepas','Overdue':'Jatuh tempo','Pending':'Menunggu','Operating Expense':'Beban operasional','Capex':'Capex','Bank':'Bank','Cash':'Kas','E-Wallet':'E-Wallet','E-W':'E-W',
+      'New transaction':'Transaksi baru','Edit transaction':'Edit transaksi','Edit revenue':'Edit pendapatan','Edit expense':'Edit pengeluaran','Edit invoice':'Edit faktur','Edit project':'Edit proyek','Edit payroll':'Edit penggajian','Edit asset':'Edit aset','Edit account':'Edit akun','Add transaction':'Tambah transaksi','Create invoice':'Buat faktur','Revenue ID':'ID pendapatan','Expense ID':'ID pengeluaran','Invoice number':'Nomor faktur','Invoice date':'Tanggal faktur','Due date':'Tanggal jatuh tempo','Service line':'Lini layanan','VAT / tax':'Pajak','Notes':'Catatan','Transaction ID':'ID transaksi','Reference':'Referensi','Direction':'Arah','Account ID':'ID akun','Account name':'Nama akun','Account type':'Jenis akun','Opening balance':'Saldo awal','Project ID':'ID proyek','Project name':'Nama proyek','Payroll ID':'ID penggajian','Month':'Bulan','Asset ID':'ID aset','Asset name':'Nama aset','Method':'Metode',
+    };
+    let language=localStorage.getItem('hmh_language')||'id';
+    function t(value){ if(language!=='id'||value==null) return String(value??''); const s=String(value); return I18N_ID[s]||s; }
+    function setLanguage(next){ if(!['id','en'].includes(next)) return; localStorage.setItem('hmh_language',next); window.location.reload(); }
+    function updateLanguageControls(){ document.querySelectorAll('[data-language]').forEach(b=>{const active=b.dataset.language===language;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));}); }
+    function translateDynamicText(s){
+      if(language!=='id') return s;
+      if(/^\d+ entries$/.test(s)) return s.replace(/^(\d+) entries$/,'$1 entri');
+      if(/^\d+ revenue records$/.test(s)) return s.replace(/^(\d+) revenue records$/,'$1 catatan pendapatan');
+      if(/^\d+ expense records$/.test(s)) return s.replace(/^(\d+) expense records$/,'$1 catatan pengeluaran');
+      if(/^\d+ payroll records$/.test(s)) return s.replace(/^(\d+) payroll records$/,'$1 catatan penggajian');
+      if(/^\d+ projects$/.test(s)) return s.replace(/^(\d+) projects$/,'$1 proyek');
+      if(/^\d+ assets$/.test(s)) return s.replace(/^(\d+) assets$/,'$1 aset');
+      if(/^\d+ accounts$/.test(s)) return s.replace(/^(\d+) accounts$/,'$1 akun');
+      if(/^\d+ overdue invoice\(s\)$/.test(s)) return s.replace(/^(\d+) overdue invoice\(s\)$/,'$1 faktur jatuh tempo');
+      if(/^For the year ending 31 December \d+$/.test(s)) return s.replace(/^For the year ending 31 December (\d+)$/,'Untuk tahun yang berakhir 31 Desember $1');
+      if(/^Across \d+ accounts$/.test(s)) return s.replace(/^Across (\d+) accounts$/,'Di seluruh $1 akun');
+      return t(s);
+    }
+    function applyTranslations(){
+      document.documentElement.lang=language;
+      const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+      const skipSelector='script,style,input,textarea,td,.mini-list,.account-list,.avatar,.account-avatar';
+      const nodes=[]; let node; while((node=walker.nextNode())) nodes.push(node);
+      for(const n of nodes){
+        const p=n.parentElement; if(!p||p.closest(skipSelector)) continue;
+        const raw=n.nodeValue||''; const trimmed=raw.trim(); if(!trimmed) continue;
+        const translated=translateDynamicText(trimmed);
+        if(translated!==trimmed) n.nodeValue=raw.replace(trimmed,translated);
+      }
+      document.querySelectorAll('input[placeholder],button[title],[aria-label]').forEach(el=>{
+        if(el.matches('input[placeholder]')){ if(!el.dataset.sourcePlaceholder) el.dataset.sourcePlaceholder=el.placeholder; el.placeholder=translateDynamicText(el.dataset.sourcePlaceholder); }
+        if(el.hasAttribute('title')){ if(!el.dataset.sourceTitle) el.dataset.sourceTitle=el.title; el.title=translateDynamicText(el.dataset.sourceTitle); }
+        if(el.hasAttribute('aria-label')){ if(!el.dataset.sourceAria) el.dataset.sourceAria=el.getAttribute('aria-label'); el.setAttribute('aria-label',translateDynamicText(el.dataset.sourceAria)); }
+      });
+      document.querySelectorAll('option').forEach(o=>{ const source=o.dataset.sourceText||o.textContent.trim(); o.dataset.sourceText=source; o.textContent=translateDynamicText(source); });
+      document.title=language==='id'?'Sistem Keuangan HMH':'HMH Finance System';
+      updateLanguageControls();
+    }
 
     const routes = {
       dashboard: {title:'Dashboard', eyebrow:'FINANCE COMMAND CENTER'},
@@ -268,6 +353,7 @@ const firebaseConfig = {
     };
 
     let firebaseApp = null;
+    let auth = null;
     let db = null;
     let unsubSettings = null, unsubAccounts = null, unsubRecords = null;
 
@@ -284,39 +370,72 @@ const firebaseConfig = {
     function setConnection(text, connected=false){ const el=document.getElementById('connectionStatus'); if(!el)return; el.textContent=text; el.previousElementSibling?.classList.toggle('connected',connected); }
 
     async function ensureWorkspace(){
-      const sSnap = await getDoc(settingsRef());
-      if(!sSnap.exists()){ await setDoc(settingsRef(), {...defaultSettings}); }
-      const aSnap = await getDocs(accountsRef());
-      if(aSnap.empty){
-        const batch = writeBatch(db);
-        defaultAccounts.forEach(a=>batch.set(accountRef(a.id), a));
-        await batch.commit();
-      }
+      try{
+        const sSnap=await getDoc(settingsRef());
+        if(!sSnap.exists()) await setDoc(settingsRef(),{...defaultSettings});
+      }catch(err){ console.warn('Settings seed skipped:',err); }
+      try{
+        const aSnap=await getDocs(accountsRef());
+        if(aSnap.empty){
+          const batch=writeBatch(db);
+          defaultAccounts.forEach(a=>batch.set(accountRef(a.id),a));
+          await batch.commit();
+        }
+      }catch(err){ console.warn('Account seed skipped:',err); }
     }
 
     function clearSubscriptions(){ [unsubSettings,unsubAccounts,unsubRecords].forEach(fn=>{try{fn?.()}catch(_){}}); unsubSettings=unsubAccounts=unsubRecords=null; }
 
+    async function ensureAnonymousAuth(){
+      auth=getAuth(firebaseApp);
+      try{ await signInAnonymously(auth); return true; }
+      catch(err){ if(err?.code==='auth/operation-not-allowed') return false; throw err; }
+    }
+
     async function startRealtimeSync(){
       clearSubscriptions();
-      await ensureWorkspace();
-      state.syncing=true;
-      setConnection('Syncing Firebase Cloud…', false);
-      unsubSettings = onSnapshot(settingsRef(), snap=>{ if(snap.exists()) mergeSettings(snap.data()); render(); });
-      unsubAccounts = onSnapshot(accountsRef(), snap=>{ state.data.accounts=snap.docs.map(d=>({id:d.id,...d.data()})); render(); });
-      unsubRecords = onSnapshot(recordsRef(), snap=>{
+      state.syncing=true; state.ready=false;
+      setConnection(t('Syncing Firebase Cloud…'),false);
+      const syncParts={settings:false,accounts:false,records:false};
+      const updateLiveState=()=>{
+        const all=syncParts.settings&&syncParts.accounts&&syncParts.records;
+        if(all){state.ready=true;state.syncing=false;setConnection(t('Firebase Cloud • Live'),true);saveLocalSnapshot();}
+      };
+      unsubSettings=onSnapshot(settingsRef(),snap=>{
+        syncParts.settings=true;
+        if(snap.exists()) mergeSettings(snap.data());
+        applyTheme(); render(); updateLiveState();
+      },err=>{state.syncing=false;state.ready=false;setConnection(firebaseStatusForError(err),false);toast(firebaseErrorMessage(err),'danger');});
+      unsubAccounts=onSnapshot(accountsRef(),snap=>{
+        syncParts.accounts=true;
+        state.data.accounts=snap.docs.map(d=>({id:d.id,...d.data()}));
+        render(); updateLiveState();
+      },err=>{state.syncing=false;state.ready=false;setConnection(firebaseStatusForError(err),false);toast(firebaseErrorMessage(err),'danger');});
+      unsubRecords=onSnapshot(recordsRef(),snap=>{
+        syncParts.records=true;
         const next={revenue:[],expenses:[],invoices:[],transactions:[],projects:[],payroll:[],assets:[]};
         snap.docs.forEach(d=>{const x={id:d.id,...d.data()}; if(next[x.module]) next[x.module].push(x);});
-        Object.assign(state.data,next); state.ready=true; state.syncing=false; setConnection('Firebase Cloud • Live',true); render();
-      }, err=>{ console.error(err); state.syncing=false; setConnection('Firebase error',false); toast(firebaseErrorMessage(err),'danger'); });
-      render();
+        Object.assign(state.data,next); state.ready=true; state.syncing=false; render(); updateLiveState();
+      },err=>{state.syncing=false;state.ready=false;setConnection(firebaseStatusForError(err),false);toast(firebaseErrorMessage(err),'danger');});
+      await ensureWorkspace();
     }
 
     function firebaseErrorMessage(err){
       const code=err?.code||'';
-      if(code.includes('permission-denied')) return 'Firestore permission denied. Check your Firestore Security Rules and database access.';
-      if(code.includes('failed-precondition')) return 'Firestore is not fully configured. Open Firebase Console and create/enable Cloud Firestore.';
-      if(code.includes('unavailable')) return 'Firebase is temporarily unavailable. Check your connection and try again.';
-      return err?.message || 'Firebase request failed.';
+      if(code.includes('permission-denied')) return t('Firestore access was denied. Check your Firestore Security Rules and, if they require request.auth, enable Anonymous Authentication in Firebase Console.');
+      if(code.includes('failed-precondition')) return t('Firestore is not fully configured. Open Firebase Console and create/enable Cloud Firestore.');
+      if(code.includes('unavailable') || code.includes('deadline-exceeded')) return t('Firebase is temporarily unavailable. Check your connection and try again.');
+      if(code.includes('not-found')) return t('Firestore database was not found for this Firebase project.');
+      if(code.includes('unauthenticated')) return t('Firebase requires authentication for this Firestore operation.');
+      if(code.includes('auth/operation-not-allowed')) return t('Anonymous authentication is not enabled')+' — '+t('Enable Anonymous Authentication in Firebase Console to use authenticated Firestore rules.');
+      return err?.message || t('Firebase request failed.');
+    }
+    function firebaseStatusForError(err){
+      const code=err?.code||'';
+      if(code.includes('permission-denied')) return t('Cloud access blocked');
+      if(code.includes('failed-precondition') || code.includes('not-found')) return t('Firestore setup required');
+      if(code.includes('unavailable') || code.includes('deadline-exceeded')) return t('Cloud unavailable');
+      return t('Cloud connection error');
     }
 
     async function saveSettings(next){
@@ -324,13 +443,14 @@ const firebaseConfig = {
       const payload={...defaultSettings,...next}; delete payload.theme;
       state.data.settings={...state.data.settings,...payload};
       await setDoc(settingsRef(), payload, {merge:true});
-      toast('Settings saved','success');
+      saveLocalSnapshot();
+      toast(t('Settings saved'),'success');
     }
 
     async function saveData(showToast=true){
       if(!db) return;
       await setDoc(settingsRef(), {...defaultSettings,...state.data.settings, theme:undefined}, {merge:true});
-      if(showToast) toast('Changes saved','success');
+      if(showToast) toast(t('Settings saved'),'success');
     }
 
     async function resetData(){
@@ -346,7 +466,8 @@ const firebaseConfig = {
         defaultAccounts.forEach(a=>{batch.set(accountRef(a.id),a);count++;});
         if(count) await batch.commit();
         await setDoc(settingsRef(), {...defaultSettings});
-        toast('Workspace reset','success');
+        saveLocalSnapshot();
+        toast(t('Workspace reset'),'success');
       }catch(err){ toast(firebaseErrorMessage(err),'danger'); }
     }
 
@@ -358,11 +479,11 @@ const firebaseConfig = {
         if (a>=1e6) return (amount/1e6).toFixed(1)+' M';
         if (a>=1e3) return (amount/1e3).toFixed(0)+' K';
       }
-      return new Intl.NumberFormat('id-ID',{style:'currency',currency:state.data.settings.currency||'IDR',maximumFractionDigits:0}).format(amount);
+      return new Intl.NumberFormat(language==='id'?'id-ID':'en-US',{style:'currency',currency:state.data.settings.currency||'IDR',maximumFractionDigits:0}).format(amount);
     }
     function fmtNumber(n){ return new Intl.NumberFormat('id-ID').format(Number(n||0)); }
-    function fmtDate(s){ if(!s) return '-'; const d=new Date(s+'T00:00:00'); return new Intl.DateTimeFormat('en-GB',{day:'2-digit',month:'short',year:'numeric'}).format(d); }
-    function monthLabel(m){ const d=new Date(m+'-01T00:00:00'); return new Intl.DateTimeFormat('en-US',{month:'short'}).format(d); }
+    function fmtDate(s){ if(!s) return '-'; const d=new Date(s+'T00:00:00'); return new Intl.DateTimeFormat(language==='id'?'id-ID':'en-GB',{day:'2-digit',month:'short',year:'numeric'}).format(d); }
+    function monthLabel(m){ const d=new Date(m+'-01T00:00:00'); return new Intl.DateTimeFormat(language==='id'?'id-ID':'en-US',{month:'short'}).format(d); }
     function esc(v){ return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
     function uid(prefix){ return prefix+'-'+Date.now().toString(36).toUpperCase().slice(-6); }
     function getMonths(){ return Array.from({length:12},(_,i)=>`${state.data.settings.year}-${String(i+1).padStart(2,'0')}`); }
@@ -385,7 +506,7 @@ const firebaseConfig = {
     function directCosts(){ return getExpenses().filter(x=>x.type==='Direct Cost').reduce((a,x)=>a+Number(x.amount||0),0); }
     function statusBadge(status){
       const map={Paid:'success',Completed:'success',Active:'info',Pending:'warning',Overdue:'danger',Draft:'muted','At Risk':'danger'};
-      const cls=map[status]||'muted'; return `<span class="badge ${cls}">${esc(status)}</span>`;
+      const cls=map[status]||'muted'; return `<span class="badge ${cls}">${esc(t(status))}</span>`;
     }
     function trendBadge(v, positive=true){
       const val=Number(v||0); const cls=(val>=0)===positive?'positive':'negative';
@@ -423,13 +544,14 @@ const firebaseConfig = {
       document.getElementById('workspacePeriod').textContent='FY '+state.data.settings.year;
       document.getElementById('periodSelect').value=String(state.data.settings.year);
       const r=routes[state.route]||routes.dashboard;
-      document.getElementById('pageEyebrow').textContent=r.eyebrow;
-      document.getElementById('pageTitle').textContent=r.title;
+      document.getElementById('pageEyebrow').textContent=t(r.eyebrow);
+      document.getElementById('pageTitle').textContent=t(r.title);
       document.querySelectorAll('.nav-item').forEach(el=>el.classList.toggle('active',el.dataset.route===state.route));
       const c=document.getElementById('pageContainer');
       const viewMap={dashboard:renderDashboard,transactions:renderTransactions,revenue:renderRevenue,expenses:renderExpenses,invoices:renderInvoices,cashflow:renderCashflow,reports:renderReports,projects:renderProjects,payroll:renderPayroll,assets:renderAssets,settings:renderSettings};
       c.innerHTML=viewMap[state.route]();
       bindPageEvents();
+      applyTranslations();
       closeMobileNav();
     }
 
@@ -437,7 +559,6 @@ const firebaseConfig = {
       const rev=totalRevenue(), exp=totalExpenses(), profit=opProfit(), ar=totalAR(), cash=cashBalance();
       const months=getMonths();
       const monthlyRev=months.map(m=>getRevenue().filter(x=>x.date.startsWith(m)).reduce((a,x)=>a+x.amount,0));
-      const monthlyExp=months.map(m=>getExpenses().filter(x=>x.date.startsWith(m)).reduce((a,x)=>a+x.amount,0)+state.data.payroll.filter(x=>x.month===m).reduce((a,x)=>a+x.base+x.allowance,0));
       const monthLabels=months.map(monthLabel);
       const projectRows=state.data.projects.map(p=>({...p,profit:Number(p.revenue)-Number(p.directCost)-Number(p.overhead),margin:Number(p.revenue)?(Number(p.revenue)-Number(p.directCost)-Number(p.overhead))/Number(p.revenue)*100:0})).sort((a,b)=>b.profit-a.profit).slice(0,5);
       const recent=getTransactions().slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,6);
@@ -496,7 +617,7 @@ const firebaseConfig = {
       const rows=getTransactions().slice().sort((a,b)=>b.date.localeCompare(a.date));
       return toolbar('Transactions','General ledger view of cash activity across company accounts.','New transaction') + `<section class="panel"><div class="panel-head"><div><span class="section-kicker">GENERAL LEDGER</span><h3>${rows.length} entries</h3></div>${dataTableToolbar()}</div><div class="table-wrap"><table id="dataTable"><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Direction</th><th>Account</th><th class="right">Amount</th><th></th></tr></thead><tbody>${rows.map(x=>transactionRow(x)).join('')||`<tr><td colspan="7">${emptyState()}</td></tr>`}</tbody></table></div></section>`;
     }
-    function transactionRow(x){return `<tr data-search="${esc([x.date,x.description,x.category,x.direction,x.account,x.reference].join(' '))}"><td>${fmtDate(x.date)}</td><td><strong>${esc(x.description)}</strong><small>${esc(x.reference||'')}</small></td><td>${esc(x.category)}</td><td>${x.direction==='Inflow'?`<span class="flow in">${ICON_ARROW_UP} Inflow</span>`:`<span class="flow out">${ICON_ARROW_DOWN} Outflow</span>`}</td><td>${esc(x.account)}</td><td class="right money">${fmtMoney(x.amount)}</td><td><button class="row-action" title="Edit" data-edit="transactions" data-id="${x.id}">${ICON_EDIT}</button><button class="row-action danger-action" title="Delete" data-delete="transactions" data-id="${x.id}">${ICON_TRASH}</button></td></tr>`;}
+    function transactionRow(x){return `<tr data-search="${esc([x.date,x.description,x.category,x.direction,x.account,x.reference].join(' '))}"><td>${fmtDate(x.date)}</td><td><strong>${esc(x.description)}</strong><small>${esc(x.reference||'')}</small></td><td>${esc(x.category)}</td><td>${x.direction==='Inflow'?`<span class="flow in">${ICON_ARROW_UP} ${esc(t('Inflow'))}</span>`:`<span class="flow out">${ICON_ARROW_DOWN} ${esc(t('Outflow'))}</span>`}</td><td>${esc(x.account)}</td><td class="right money">${fmtMoney(x.amount)}</td><td><button class="row-action" title="Edit" data-edit="transactions" data-id="${x.id}">${ICON_EDIT}</button><button class="row-action danger-action" title="Delete" data-delete="transactions" data-id="${x.id}">${ICON_TRASH}</button></td></tr>`;}
 
     function renderRevenue(){
       const rows=getRevenue().slice().sort((a,b)=>b.date.localeCompare(a.date));
@@ -518,7 +639,7 @@ const firebaseConfig = {
       const inflow=months.map(m=>getTransactions().filter(x=>x.date.startsWith(m)&&x.direction==='Inflow').reduce((a,x)=>a+x.amount,0));
       const outflow=months.map(m=>getTransactions().filter(x=>x.date.startsWith(m)&&x.direction==='Outflow').reduce((a,x)=>a+x.amount,0));
       const net= inflow.map((v,i)=>v-outflow[i]);
-      return toolbar('Cash Flow','Understand monthly inflows, outflows, and ending liquidity across company accounts.','Add cash entry') + `<div class="summary-strip"><div><span>Current cash</span><strong>${fmtMoney(cashBalance())}</strong></div><div><span>Cash inflow</span><strong>${fmtMoney(sum(inflow.map(v=>({v}),{}), 'v'))}</strong></div><div><span>Cash outflow</span><strong>${fmtMoney(outflow.reduce((a,b)=>a+b,0))}</strong></div><div><span>Net cash movement</span><strong class="${net.reduce((a,b)=>a+b,0)>=0?'':'danger-text'}">${fmtMoney(net.reduce((a,b)=>a+b,0))}</strong></div></div><div class="grid-2-1"><section class="panel panel-chart"><div class="panel-head"><div><span class="section-kicker">MONTHLY LIQUIDITY</span><h3>Net cash movement</h3></div><span class="panel-note">FY ${state.data.settings.year}</span></div>${chartLine(net,labels)}</section><section class="panel"><div class="panel-head"><div><span class="section-kicker">ACCOUNTS</span><h3>Bank & cash balances</h3></div></div><div class="account-list">${state.data.accounts.map(a=>`<div class="account-row"><div class="account-avatar">${a.type==='Bank'?'BNK':'CASH'}</div><div><strong>${esc(a.name)}</strong><small>${esc(a.type)}</small></div><strong>${fmtMoney(a.balance)}</strong></div>`).join('')}</div></section></div><section class="panel"><div class="panel-head"><div><span class="section-kicker">CASH MOVEMENT</span><h3>Monthly cash flow detail</h3></div></div><div class="table-wrap"><table><thead><tr><th>Month</th><th class="right">Inflow</th><th class="right">Outflow</th><th class="right">Net</th></tr></thead><tbody>${months.map((m,i)=>`<tr><td><strong>${monthLabel(m)}</strong> ${state.data.settings.year}</td><td class="right money money-in">${fmtMoney(inflow[i])}</td><td class="right money money-out">${fmtMoney(outflow[i])}</td><td class="right money ${net[i]<0?'danger-text':''}">${fmtMoney(net[i])}</td></tr>`).join('')}</tbody></table></div></section>`;
+      return toolbar('Cash Flow','Understand monthly inflows, outflows, and ending liquidity across company accounts.','Add cash entry') + `<div class="summary-strip"><div><span>Current cash</span><strong>${fmtMoney(cashBalance())}</strong></div><div><span>Cash inflow</span><strong>${fmtMoney(sum(inflow.map(v=>({v}),{}), 'v'))}</strong></div><div><span>Cash outflow</span><strong>${fmtMoney(outflow.reduce((a,b)=>a+b,0))}</strong></div><div><span>Net cash movement</span><strong class="${net.reduce((a,b)=>a+b,0)>=0?'':'danger-text'}">${fmtMoney(net.reduce((a,b)=>a+b,0))}</strong></div></div><div class="grid-2-1"><section class="panel panel-chart"><div class="panel-head"><div><span class="section-kicker">MONTHLY LIQUIDITY</span><h3>Net cash movement</h3></div><span class="panel-note">FY ${state.data.settings.year}</span></div>${chartLine(net,labels)}</section><section class="panel"><div class="panel-head"><div><span class="section-kicker">ACCOUNTS</span><h3>Bank & cash balances</h3></div></div><div class="account-list">${state.data.accounts.map(a=>`<div class="account-row"><div class="account-avatar">${a.type==='Bank'?'BNK':'CASH'}</div><div><strong>${esc(a.name)}</strong><small>${esc(t(a.type))}</small></div><strong>${fmtMoney(accountBalance(a.name))}</strong></div>`).join('')}</div></section></div><section class="panel"><div class="panel-head"><div><span class="section-kicker">CASH MOVEMENT</span><h3>Monthly cash flow detail</h3></div></div><div class="table-wrap"><table><thead><tr><th>Month</th><th class="right">Inflow</th><th class="right">Outflow</th><th class="right">Net</th></tr></thead><tbody>${months.map((m,i)=>`<tr><td><strong>${monthLabel(m)}</strong> ${state.data.settings.year}</td><td class="right money money-in">${fmtMoney(inflow[i])}</td><td class="right money money-out">${fmtMoney(outflow[i])}</td><td class="right money ${net[i]<0?'danger-text':''}">${fmtMoney(net[i])}</td></tr>`).join('')}</tbody></table></div></section>`;
     }
     function renderReports(){
       const rev=totalRevenue(), direct=directCosts(), opex=getExpenses().filter(x=>x.type!=='Direct Cost').reduce((a,x)=>a+x.amount,0), payroll=totalPayroll();
@@ -543,8 +664,8 @@ const firebaseConfig = {
     }
     function renderSettings(){
       const s=state.data.settings;
-      const accountRows=state.data.accounts.map(a=>`<div class="account-row"><div class="account-avatar">${a.type==='Bank'?'BNK':a.type==='Cash'?'CASH':'E-W'}</div><div><strong>${esc(a.name)}</strong><small>${esc(a.type)} • Opening ${fmtMoney(a.openingBalance)}</small></div><div style="display:flex;align-items:center;gap:4px"><strong>${fmtMoney(accountBalance(a.name))}</strong><button class="row-action" data-edit="accounts" data-id="${esc(a.id)}" title="Edit">${ICON_EDIT}</button><button class="row-action danger-action" data-delete="accounts" data-id="${esc(a.id)}" title="Delete">${ICON_TRASH}</button></div></div>`).join('');
-      return toolbar('Settings','Configure company profile, finance assumptions, Firebase workspace, and account structure.','Add account') + `<div class="settings-grid"><section class="panel"><div class="panel-head"><div><span class="section-kicker">COMPANY PROFILE</span><h3>Workspace</h3></div></div><form id="settingsForm" class="form-grid"><label><span>Company display name</span><input name="companyName" value="${esc(s.companyName)}"/></label><label><span>Legal name</span><input name="legalName" value="${esc(s.legalName)}"/></label><label><span>Currency</span><select name="currency"><option ${s.currency==='IDR'?'selected':''}>IDR</option><option ${s.currency==='USD'?'selected':''}>USD</option><option ${s.currency==='SGD'?'selected':''}>SGD</option><option ${s.currency==='MYR'?'selected':''}>MYR</option></select></label><label><span>Fiscal year</span><select name="year">${[2025,2026,2027,2028,2029].map(y=>`<option ${s.year===y?'selected':''}>${y}</option>`).join('')}</select></label><label><span>VAT / tax assumption (%)</span><input type="number" step="0.01" min="0" name="taxRate" value="${s.taxRate}"/></label><label><span>Management reserve (%)</span><input type="number" step="0.01" min="0" name="defaultReserveRate" value="${s.defaultReserveRate}"/></label><div class="form-actions"><button type="submit" class="btn btn-primary">${ICON_CHECK}<span>Save changes</span></button></div></form></section><section class="panel"><div class="panel-head"><div><span class="section-kicker">FIREBASE CLOUD</span><h3>Workspace connection</h3></div></div><div class="security-note"><div class="security-icon">${ICON_SETTINGS}</div><div><strong>HMH Group Finance Workspace</strong><p>Workspace: <b>${COMPANY_ID}</b><br>Data sync: ${state.ready?'Live through Cloud Firestore':'Connecting…'}<br>Storage: Cloud Firestore</p></div></div><div class="settings-actions"><button class="setting-action" data-action="toggle-theme"><span class="setting-icon">${s.theme==='dark'?ICON_SUN:ICON_MOON}</span><div><strong>${s.theme==='dark'?'Switch to light mode':'Switch to dark mode'}</strong><small>HMH navy + yellow presentation</small></div>${ICON_CHEVRON}</button><button class="setting-action" data-action="export-json"><span class="setting-icon">${ICON_DOWNLOAD}</span><div><strong>Backup finance data</strong><small>Download a JSON copy of the current Firebase workspace</small></div>${ICON_CHEVRON}</button><button class="setting-action" data-action="import-json"><span class="setting-icon">${ICON_RECEIPT}</span><div><strong>Restore from backup</strong><small>Replace the current Firebase workspace with a JSON backup</small></div>${ICON_CHEVRON}</button><button class="setting-action danger" data-action="reset-data"><span class="setting-icon">${ICON_TRASH}</span><div><strong>Reset workspace</strong><small>Delete finance records and restore default accounts</small></div>${ICON_CHEVRON}</button></div></section></div><section class="panel"><div class="panel-head"><div><span class="section-kicker">ACCOUNT STRUCTURE</span><h3>Bank & cash accounts</h3></div><button class="btn btn-secondary" data-action="add-account">${ICON_PLUS}<span>Add account</span></button></div><div class="account-list">${accountRows||emptyState('No accounts','Create a bank, cash, or e-wallet account to begin tracking liquidity.')}</div></section>`;
+      const accountRows=state.data.accounts.map(a=>`<div class="account-row"><div class="account-avatar">${a.type==='Bank'?'BNK':a.type==='Cash'?'CASH':'E-W'}</div><div><strong>${esc(a.name)}</strong><small>${esc(t(a.type))} • ${esc(t("Opening"))} ${fmtMoney(a.openingBalance)}</small></div><div style="display:flex;align-items:center;gap:4px"><strong>${fmtMoney(accountBalance(a.name))}</strong><button class="row-action" data-edit="accounts" data-id="${esc(a.id)}" title="Edit">${ICON_EDIT}</button><button class="row-action danger-action" data-delete="accounts" data-id="${esc(a.id)}" title="Delete">${ICON_TRASH}</button></div></div>`).join('');
+      return toolbar('Settings','Configure company profile, finance assumptions, Firebase workspace, and account structure.','Add account') + `<div class="settings-grid"><section class="panel"><div class="panel-head"><div><span class="section-kicker">COMPANY PROFILE</span><h3>Workspace</h3></div></div><form id="settingsForm" class="form-grid"><label><span>Company display name</span><input name="companyName" value="${esc(s.companyName)}"/></label><label><span>Legal name</span><input name="legalName" value="${esc(s.legalName)}"/></label><label><span>Currency</span><select name="currency"><option ${s.currency==='IDR'?'selected':''}>IDR</option><option ${s.currency==='USD'?'selected':''}>USD</option><option ${s.currency==='SGD'?'selected':''}>SGD</option><option ${s.currency==='MYR'?'selected':''}>MYR</option></select></label><label><span>Fiscal year</span><select name="year">${[2025,2026,2027,2028,2029].map(y=>`<option ${s.year===y?'selected':''}>${y}</option>`).join('')}</select></label><label><span>VAT / tax assumption (%)</span><input type="number" step="0.01" min="0" name="taxRate" value="${s.taxRate}"/></label><label><span>Management reserve (%)</span><input type="number" step="0.01" min="0" name="defaultReserveRate" value="${s.defaultReserveRate}"/></label><div class="form-actions"><button type="submit" class="btn btn-primary">${ICON_CHECK}<span>Save changes</span></button></div></form></section><section class="panel"><div class="panel-head"><div><span class="section-kicker">FIREBASE CLOUD</span><h3>Workspace connection</h3></div></div><div class="security-note"><div class="security-icon">${ICON_SETTINGS}</div><div><strong>HMH Group Finance Workspace</strong><p>${esc(t('Workspace'))}: <b>${COMPANY_ID}</b><br>${esc(t('Data sync'))}: ${state.ready?'Live through Cloud Firestore':'Connecting…'}<br>${esc(t('Storage'))}: Cloud Firestore</p></div></div><div class="settings-actions"><button class="setting-action" data-action="toggle-theme"><span class="setting-icon">${s.theme==='dark'?ICON_SUN:ICON_MOON}</span><div><strong>${s.theme==='dark'?'Switch to light mode':'Switch to dark mode'}</strong><small>HMH navy + yellow presentation</small></div>${ICON_CHEVRON}</button><button class="setting-action" data-action="export-json"><span class="setting-icon">${ICON_DOWNLOAD}</span><div><strong>Backup finance data</strong><small>Download a JSON copy of the current Firebase workspace</small></div>${ICON_CHEVRON}</button><button class="setting-action" data-action="import-json"><span class="setting-icon">${ICON_RECEIPT}</span><div><strong>Restore from backup</strong><small>Replace the current Firebase workspace with a JSON backup</small></div>${ICON_CHEVRON}</button><button class="setting-action danger" data-action="reset-data"><span class="setting-icon">${ICON_TRASH}</span><div><strong>Reset workspace</strong><small>Delete finance records and restore default accounts</small></div>${ICON_CHEVRON}</button></div></section></div><section class="panel"><div class="panel-head"><div><span class="section-kicker">ACCOUNT STRUCTURE</span><h3>Bank & cash accounts</h3></div><button class="btn btn-secondary" data-action="add-account">${ICON_PLUS}<span>Add account</span></button></div><div class="account-list">${accountRows||emptyState('No accounts','Create a bank, cash, or e-wallet account to begin tracking liquidity.')}</div></section>`;
     }
 
     function bindPageEvents(){
@@ -559,7 +680,7 @@ const firebaseConfig = {
       document.querySelectorAll('[data-action="export-json"]').forEach(b=>b.addEventListener('click',exportJson));
       document.querySelectorAll('[data-action="import-json"]').forEach(b=>b.addEventListener('click',()=>document.getElementById('importFile').click()));
       document.querySelectorAll('[data-action="reset-data"]').forEach(b=>b.addEventListener('click',resetData));
-      document.querySelectorAll('[data-action="filter-toggle"]').forEach(b=>b.addEventListener('click',()=>toast('Use the search field to filter the current register','info')));
+      document.querySelectorAll('[data-action="filter-toggle"]').forEach(b=>b.addEventListener('click',()=>toast(t('Use the search field to filter the current register'),'info')));
       document.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>openRecordModal(b.dataset.edit,b.dataset.id)));
       document.querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>deleteRecord(b.dataset.delete,b.dataset.id)));
       document.querySelectorAll('.report-tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.report-tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');const rev=totalRevenue(),direct=directCosts(),opex=getExpenses().filter(x=>x.type!=='Direct Cost').reduce((a,x)=>a+x.amount,0),payroll=totalPayroll();document.getElementById('reportContent').innerHTML=b.dataset.report==='pnl'?renderPnlReport(rev,direct,opex,payroll,rev-direct,rev-direct-opex-payroll):b.dataset.report==='cash'?renderCashReport():renderManagementReport();}));
@@ -567,7 +688,7 @@ const firebaseConfig = {
     }
 
     function renderCashReport(){ const months=getMonths(); const inflow=months.map(m=>getTransactions().filter(x=>x.date.startsWith(m)&&x.direction==='Inflow').reduce((a,x)=>a+x.amount,0)); const outflow=months.map(m=>getTransactions().filter(x=>x.date.startsWith(m)&&x.direction==='Outflow').reduce((a,x)=>a+x.amount,0)); const net=inflow.map((x,i)=>x-outflow[i]); return `<div class="report-grid"><section class="panel panel-chart"><div class="panel-head"><div><span class="section-kicker">CASH REPORT</span><h3>Monthly net cash</h3></div></div>${chartLine(net,months.map(monthLabel))}</section><section class="panel"><div class="panel-head"><div><span class="section-kicker">LIQUIDITY</span><h3>Current position</h3></div></div><div class="big-metric">${fmtMoney(cashBalance())}<span>Current cash balance</span></div><div class="ratio-grid"><div><span>Open AR</span><strong>${fmtMoney(totalAR(),true)}</strong></div><div><span>Paid revenue</span><strong>${fmtMoney(paidRevenue(),true)}</strong></div><div><span>Paid expenses</span><strong>${fmtMoney(paidExpenses(),true)}</strong></div><div><span>Net cash movement</span><strong>${fmtMoney(net.reduce((a,b)=>a+b,0),true)}</strong></div></div></section></div>`; }
-    function renderManagementReport(){ return `<div class="management-grid"><div class="management-card"><span>Revenue</span><strong>${fmtMoney(totalRevenue())}</strong><small>YTD</small></div><div class="management-card"><span>Operating profit</span><strong>${fmtMoney(opProfit())}</strong><small>${margin().toFixed(1)}% margin</small></div><div class="management-card"><span>Cash</span><strong>${fmtMoney(cashBalance())}</strong><small>Across ${state.data.accounts.length} accounts</small></div><div class="management-card"><span>AR exposure</span><strong>${fmtMoney(totalAR())}</strong><small>${getInvoices().filter(x=>x.status==='Overdue').length} overdue invoice(s)</small></div></div><section class="panel"><div class="panel-head"><div><span class="section-kicker">MANAGEMENT FOCUS</span><h3>Areas to review</h3></div></div><div class="focus-list"><div><span class="focus-dot warning"></span><div><strong>Receivable exposure</strong><p>${fmtMoney(totalAR())} remains open across current invoices.</p></div></div><div><span class="focus-dot yellow"></span><div><strong>Project margin</strong><p>Review active projects with margins below 20% before adding delivery scope.</p></div></div><div><span class="focus-dot blue"></span><div><strong>Cash visibility</strong><p>Keep account balances reconciled with your external bank statements.</p></div></div></div></section>`; }
+    function renderManagementReport(){ return `<div class="management-grid"><div class="management-card"><span>Revenue</span><strong>${fmtMoney(totalRevenue())}</strong><small>YTD</small></div><div class="management-card"><span>Operating profit</span><strong>${fmtMoney(opProfit())}</strong><small>${margin().toFixed(1)}% margin</small></div><div class="management-card"><span>Cash</span><strong>${fmtMoney(cashBalance())}</strong><small>${translateDynamicText('Across '+state.data.accounts.length+' accounts')}</small></div><div class="management-card"><span>AR exposure</span><strong>${fmtMoney(totalAR())}</strong><small>${translateDynamicText(getInvoices().filter(x=>x.status==='Overdue').length+' overdue invoice(s)')}</small></div></div><section class="panel"><div class="panel-head"><div><span class="section-kicker">MANAGEMENT FOCUS</span><h3>Areas to review</h3></div></div><div class="focus-list"><div><span class="focus-dot warning"></span><div><strong>Receivable exposure</strong><p>${fmtMoney(totalAR())} ${language==='id'?'masih terbuka pada faktur saat ini.':'remains open across current invoices.'}</p></div></div><div><span class="focus-dot yellow"></span><div><strong>Project margin</strong><p>${language==='id'?'Tinjau proyek aktif dengan margin di bawah 20% sebelum menambah lingkup pekerjaan.':'Review active projects with margins below 20% before adding delivery scope.'}</p></div></div><div><span class="focus-dot blue"></span><div><strong>Cash visibility</strong><p>${language==='id'?'Pastikan saldo akun direkonsiliasi dengan rekening koran bank eksternal.':'Keep account balances reconciled with your external bank statements.'}</p></div></div></div></section>`; }
 
 
     function accountBalance(accountName){
@@ -604,17 +725,18 @@ const firebaseConfig = {
         }
       }
       await batch.commit();
-      toast(existing?'Record updated':'Record created','success');
+      saveLocalSnapshot();
+      toast(existing?t('Record updated'):t('Record created'),'success');
     }
 
     async function deleteRecord(route,id){
       if(!db) return;
       const coll=route==='accounts'?state.data.accounts:state.data[route]; const obj=coll?.find(x=>x.id===id); if(!obj) return;
-      if(!confirm(`Delete ${id}? This action cannot be undone.`)) return;
+      if(!confirm(`${t('Delete')} ${id}? ${t('This action cannot be undone.')}`)) return;
       try{
         const batch=writeBatch(db);
         if(route==='accounts'){
-          if(getTransactions().some(t=>t.account===obj.name)){ toast('Account cannot be deleted while transactions reference it.','warning'); return; }
+          if(getTransactions().some(t=>t.account===obj.name)){ toast(t('Account cannot be deleted while transactions reference it.'),'warning'); return; }
           batch.delete(accountRef(id));
         }else{
           batch.delete(recordRef(id));
@@ -622,7 +744,7 @@ const firebaseConfig = {
             const linked=getTransactions().find(t=>t.reference===id); if(linked) batch.delete(recordRef(linked.id));
           }
         }
-        await batch.commit(); toast('Record deleted','success');
+        await batch.commit(); saveLocalSnapshot(); toast(t('Record deleted'),'success');
       }catch(err){toast(firebaseErrorMessage(err),'danger');}
     }
 
@@ -641,8 +763,8 @@ const firebaseConfig = {
       };
       if(!schemas[route]) return;
       const s=schemas[route];
-      const fields=s.fields.map(f=>{const [name,label,type,value,opts]=f;let input='';const readonly=(existing&&(name==='id'||(route==='accounts'&&name==='name'))) ? 'readonly' : '';if(type==='textarea')input=`<textarea name="${name}" rows="3">${esc(value)}</textarea>`;else if(type==='select')input=`<select name="${name}">${opts.map(o=>`<option ${String(value)===String(o)?'selected':''}>${esc(o)}</option>`).join('')}</select>`;else input=`<input name="${name}" type="${type}" value="${esc(value)}" ${type==='number'?'step="1" min="0"':''} ${readonly}/>`;return `<label><span>${esc(label)}</span>${input}</label>`;}).join('');
-      document.getElementById('modalRoot').innerHTML=`<div class="modal-backdrop" id="modalBackdrop"><div class="modal"><div class="modal-head"><div><span class="section-kicker">${esc(routes[route]?.eyebrow||'FINANCE')}</span><h3>${esc(s.title)}</h3></div><button class="icon-button subtle" data-modal-close>${ICON_CLOSE}</button></div><form id="recordForm" class="form-grid">${fields}<div class="modal-actions"><button type="button" class="btn btn-secondary" data-modal-close>Cancel</button><button class="btn btn-primary" type="submit">${ICON_CHECK}<span>${id?'Save changes':'Create record'}</span></button></div></form></div></div>`;
+      const fields=s.fields.map(f=>{const [name,label,type,value,opts]=f;let input='';const readonly=(existing&&(name==='id'||(route==='accounts'&&name==='name'))) ? 'readonly' : '';if(type==='textarea')input=`<textarea name="${name}" rows="3">${esc(value)}</textarea>`;else if(type==='select')input=`<select name="${name}">${opts.map(o=>`<option value="${esc(o)}" data-source-text="${esc(o)}" ${String(value)===String(o)?'selected':''}>${esc(t(o))}</option>`).join('')}</select>`;else input=`<input name="${name}" type="${type}" value="${esc(value)}" ${type==='number'?'step="1" min="0"':''} ${readonly}/>`;return `<label><span>${esc(t(label))}</span>${input}</label>`;}).join('');
+      document.getElementById('modalRoot').innerHTML=`<div class="modal-backdrop" id="modalBackdrop"><div class="modal"><div class="modal-head"><div><span class="section-kicker">${esc(routes[route]?.eyebrow||'FINANCE')}</span><h3>${esc(s.title)}</h3></div><button class="icon-button subtle" data-modal-close>${ICON_CLOSE}</button></div><form id="recordForm" class="form-grid">${fields}<div class="modal-actions"><button type="button" class="btn btn-secondary" data-modal-close>${t('Cancel')}</button><button class="btn btn-primary" type="submit">${ICON_CHECK}<span>${t(id?'Save changes':'Create record')}</span></button></div></form></div></div>`;
       document.querySelectorAll('[data-modal-close]').forEach(b=>b.addEventListener('click',closeModal));
       document.getElementById('recordForm').addEventListener('submit',async e=>{e.preventDefault();try{const fd=new FormData(e.target),obj={};for(const[k,v]of fd.entries())obj[k]=(e.target.elements[k]?.type==='number'?Number(v):v);if(route==='accounts'&&!obj.id)obj.id=uid('ACC');if(route!=='accounts'&&!obj.id)obj.id=uid(route.slice(0,3).toUpperCase());await saveRecord(route,obj,existing);closeModal();}catch(err){toast(firebaseErrorMessage(err),'danger');}});
     }
@@ -654,12 +776,11 @@ const firebaseConfig = {
 
     function exportJson(){
       const payload={exportedAt:new Date().toISOString(),companyId:COMPANY_ID,settings:state.data.settings,accounts:state.data.accounts,revenue:state.data.revenue,expenses:state.data.expenses,invoices:state.data.invoices,transactions:state.data.transactions,projects:state.data.projects,payroll:state.data.payroll,assets:state.data.assets};
-      const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`hmh-finance-firebase-backup-${state.data.settings.year}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('Firebase workspace backup downloaded','success');
+      const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`hmh-finance-firebase-backup-${state.data.settings.year}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast(t('Firebase workspace backup downloaded'),'success');
     }
 
     async function importJsonToFirebase(parsed){
       if(!parsed?.settings) throw new Error('Invalid backup');
-      const batchDeletes=async(refSnap, refFactory)=>{let batch=writeBatch(db),count=0;for(const d of refSnap.docs){batch.delete(d.ref);if(++count===450){await batch.commit();batch=writeBatch(db);count=0;}}return {batch,count};};
       const recSnap=await getDocs(recordsRef());
       let batch=writeBatch(db),count=0;
       for(const d of recSnap.docs){batch.delete(d.ref);if(++count===450){await batch.commit();batch=writeBatch(db);count=0;}}
@@ -672,48 +793,76 @@ const firebaseConfig = {
       batch=writeBatch(db);count=0;
       for(const module of RECORD_MODULES){for(const x of (Array.isArray(parsed[module])?parsed[module]:[])){const id=x.id||uid(module.slice(0,3).toUpperCase());batch.set(recordRef(id),{...x,id,module});if(++count===450){await batch.commit();batch=writeBatch(db);count=0;}}}
       if(count)await batch.commit();
+      saveLocalSnapshot();
     }
 
-    function exportCurrentTable(){ const table=document.querySelector('#dataTable'); if(!table){toast('No table to export','warning');return;} const headers=[...table.querySelectorAll('thead th')].slice(0,-1).map(x=>x.textContent.trim()); const rows=[...table.querySelectorAll('tbody tr')].filter(x=>x.style.display!=='none').map(tr=>[...tr.querySelectorAll('td')].slice(0,-1).map(td=>td.innerText.trim().replace(/\n+/g,' '))); downloadCsv(rows.map(r=>Object.fromEntries(headers.map((h,i)=>[h,r[i]||'']))),state.route); }
-    function downloadCsv(rows,name){ if(!rows.length){toast('No data to export','warning');return;} const headers=Object.keys(rows[0]); const csv=[headers.join(','),...rows.map(r=>headers.map(h=>`"${String(r[h]??'').replace(/"/g,'""')}"`).join(','))].join('\n'); const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`hmh-${name}-${state.data.settings.year}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('CSV exported','success'); }
+    function exportCurrentTable(){ const table=document.querySelector('#dataTable'); if(!table){toast(t('No table to export'),'warning');return;} const headers=[...table.querySelectorAll('thead th')].slice(0,-1).map(x=>x.textContent.trim()); const rows=[...table.querySelectorAll('tbody tr')].filter(x=>x.style.display!=='none').map(tr=>[...tr.querySelectorAll('td')].slice(0,-1).map(td=>td.innerText.trim().replace(/\n+/g,' '))); downloadCsv(rows.map(r=>Object.fromEntries(headers.map((h,i)=>[h,r[i]||'']))),state.route); }
+    function downloadCsv(rows,name){ if(!rows.length){toast(t('No data to export'),'warning');return;} const headers=Object.keys(rows[0]); const csv=[headers.join(','),...rows.map(r=>headers.map(h=>`"${String(r[h]??'').replace(/"/g,'""')}"`).join(','))].join('\n'); const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`hmh-${name}-${state.data.settings.year}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast(t('CSV exported'),'success'); }
+
+    const LOCAL_SNAPSHOT_KEY='hmh_finance_snapshot_v2';
+    function saveLocalSnapshot(){
+      try{ localStorage.setItem(LOCAL_SNAPSHOT_KEY,JSON.stringify(state.data)); }catch(_){}
+    }
+    function restoreLocalSnapshot(){
+      try{
+        const raw=localStorage.getItem(LOCAL_SNAPSHOT_KEY); if(!raw) return false;
+        const parsed=JSON.parse(raw); if(!parsed||!parsed.settings) return false;
+        state.data={...deepClone(defaultData),...parsed,settings:{...deepClone(defaultData.settings),...(parsed.settings||{})}};
+        return true;
+      }catch(_){return false;}
+    }
 
     async function initFirebase(){
-      state.data.settings.theme = localStorage.getItem('hmh_theme') || 'dark';
+      restoreLocalSnapshot();
+      state.data.settings.theme=localStorage.getItem('hmh_theme')||state.data.settings.theme||'dark';
       const savedYear=localStorage.getItem('hmh_year');
       if(savedYear) state.data.settings.year=Number(savedYear);
-      applyTheme();
-      render();
+      language=localStorage.getItem('hmh_language')||'id';
+      applyTheme(); updateLanguageControls(); render();
       if(!firebaseIsConfigured()){
-        setConnection('Firebase configuration required',false);
-        toast('Firebase configuration is incomplete. The dashboard is shown, but cloud sync is unavailable.','warning');
+        setConnection(t('Configuration required'),false);
+        toast(t('Firebase configuration is incomplete. The dashboard is shown, but cloud sync is unavailable.'),'warning');
         return;
       }
       try{
-        firebaseApp=initializeApp(firebaseConfig);
+        firebaseApp=getApps().length?getApp():initializeApp(firebaseConfig);
+        try{ await ensureAnonymousAuth(); }catch(authErr){ console.warn('Firebase Authentication:',authErr); }
         db=getFirestore(firebaseApp);
         await startRealtimeSync();
       }catch(err){
         console.error(err);
-        setConnection('Firebase error',false);
+        state.syncing=false; state.ready=false;
+        setConnection(firebaseStatusForError(err),false);
         toast(firebaseErrorMessage(err),'danger');
       }
     }
+
+    let deferredInstallPrompt=null;
+    function isStandalone(){ return window.matchMedia && window.matchMedia('(display-mode: standalone)').matches; }
+    function updateInstallButton(){ const b=document.getElementById('installAppBtn'); if(!b)return; b.hidden=!!deferredInstallPrompt?false:true; if(isStandalone()) b.hidden=true; }
+    window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;updateInstallButton();});
+    window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;updateInstallButton();toast(t('App installed'),'success');});
 
     document.addEventListener('click',e=>{ const routeBtn=e.target.closest('[data-route]'); if(routeBtn){ state.route=routeBtn.dataset.route; render(); } });
     document.getElementById('periodSelect').addEventListener('change',e=>{ const year=Number(e.target.value); localStorage.setItem('hmh_year',String(year)); state.data.settings.year=year; render(); });
     document.getElementById('themeToggle').addEventListener('click',toggleTheme);
     document.getElementById('exportDataBtn').addEventListener('click',exportJson);
+    document.querySelectorAll('[data-language]').forEach(b=>b.addEventListener('click',()=>setLanguage(b.dataset.language)));
+    document.getElementById('installAppBtn').addEventListener('click',async()=>{if(!deferredInstallPrompt){toast(t('Install option is not available yet.')+' '+t('Use Chrome menu → Install HMH Finance System when the option appears.'),'warning');return;}const p=deferredInstallPrompt;deferredInstallPrompt=null;updateInstallButton();try{await p.prompt();await p.userChoice;}catch(err){console.error(err);toast(err?.message||t('Install option is not available yet.'),'warning');}});
     document.getElementById('mobileNavBtn').addEventListener('click',openMobileNav);
     document.getElementById('mobileOverlay').addEventListener('click',closeMobileNav);
     function openMobileNav(){document.getElementById('sidebar').classList.add('open');document.getElementById('mobileOverlay').classList.add('show');}
     function closeMobileNav(){document.getElementById('sidebar').classList.remove('open');document.getElementById('mobileOverlay').classList.remove('show');}
-    document.getElementById('importFile').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async()=>{try{const parsed=JSON.parse(r.result);await importJsonToFirebase(parsed);toast('Backup restored to Firebase','success');}catch(err){console.error(err);toast(firebaseErrorMessage(err),'danger');}};r.readAsText(f);e.target.value='';});
+    document.getElementById('importFile').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async()=>{try{const parsed=JSON.parse(r.result);await importJsonToFirebase(parsed);toast(t('Backup restored to Firebase'),'success');}catch(err){console.error(err);toast(firebaseErrorMessage(err),'danger');}};r.readAsText(f);e.target.value='';});
 
     document.querySelectorAll('.nav-item').forEach(btn=>{const label=btn.querySelector('span')?.textContent?.trim()||btn.textContent.trim();btn.innerHTML=({dashboard:ICON_DASH,transactions:ICON_TX,revenue:ICON_REVENUE,expenses:ICON_EXPENSE,invoices:ICON_INVOICE,cashflow:ICON_CASH,reports:ICON_REPORT,projects:ICON_PROJECT,payroll:ICON_PAYROLL,assets:ICON_ASSET,settings:ICON_SETTINGS}[btn.dataset.route]||'')+'<span>'+label+'</span>';});
     document.querySelector('.period-control > span').innerHTML=ICON_CALENDAR;
     document.getElementById('themeToggle').innerHTML=ICON_SUN;
     document.getElementById('exportDataBtn').innerHTML=ICON_DOWNLOAD;
     document.getElementById('mobileNavBtn').innerHTML=ICON_MENU;
+    updateInstallButton();
+    updateLanguageControls();
+    if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(err=>console.warn('Service worker registration failed:',err))); }
     initFirebase();
   
   </script>
