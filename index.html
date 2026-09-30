@@ -171,7 +171,7 @@
       'OVERVIEW':'RINGKASAN','FINANCE':'KEUANGAN','OPERATIONS':'OPERASIONAL','Workspace':'Ruang Kerja','Finance Command Center':'PUSAT KENDALI KEUANGAN','GENERAL LEDGER':'BUKU BESAR','INCOME MANAGEMENT':'MANAJEMEN PENDAPATAN','SPEND MANAGEMENT':'MANAJEMEN PENGELUARAN','RECEIVABLES':'PIUTANG','LIQUIDITY MANAGEMENT':'MANAJEMEN LIKUIDITAS','FINANCIAL REPORTING':'PELAPORAN KEUANGAN','PROJECT PROFITABILITY':'PROFITABILITAS PROYEK','PEOPLE COSTS':'BIAYA SDM','FIXED ASSETS':'ASET TETAP','SYSTEM CONFIGURATION':'KONFIGURASI SISTEM',
       'Reporting period':'Periode laporan','Finance administrator':'Administrator keuangan','Administrator':'Administrator','Open navigation':'Buka navigasi','Toggle theme':'Ubah tema','Export data as JSON':'Ekspor data sebagai JSON',
       'Connecting to Firebase…':'Menghubungkan ke Firebase…','Syncing Firebase Cloud…':'Menyinkronkan Firebase Cloud…','Firebase Cloud • Live':'Firebase Cloud • Aktif','Cloud access blocked':'Akses cloud diblokir','Cloud unavailable':'Cloud tidak tersedia','Firestore setup required':'Firestore belum siap','Cloud connection error':'Koneksi cloud bermasalah','Configuration required':'Konfigurasi diperlukan','Local mode — cloud unavailable':'Mode lokal — cloud tidak tersedia',
-      'Good evening, HMH.':'Selamat sore, HMH.','Your finance cockpit is up to date. Monitor liquidity, profitability, and receivables from one place.':'Pusat kendali keuangan Anda sudah diperbarui. Pantau likuiditas, profitabilitas, dan piutang dari satu tempat.','New transaction':'Transaksi baru','Export CSV':'Ekspor CSV','Total Revenue':'Total Pendapatan','Operating Expenses':'Beban Operasional','Operating Profit':'Laba Operasional','Cash Balance':'Saldo Kas','Accounts Receivable':'Piutang Usaha','YTD':'YTD','Open invoices':'Faktur terbuka','Cost managed':'Biaya terkelola','Available liquidity':'Likuiditas tersedia','Outstanding':'Belum tertagih','YTD tracked':'Terpantau YTD','accounts':'akun','12-MONTH VIEW':'TAMPILAN 12 BULAN','Revenue performance':'Kinerja pendapatan','YTD revenue':'Pendapatan YTD','Revenue':'Pendapatan','Operating outflow':'Arus kas keluar operasional','(hover in Reports for detail)':'(lihat Laporan untuk detail)','SPEND MIX':'KOMPOSISI PENGELUARAN','Expense allocation':'Alokasi pengeluaran','No expenses':'Belum ada pengeluaran','Add your first expense to see allocation.':'Tambahkan pengeluaran pertama untuk melihat alokasinya.','RECENT ACTIVITY':'AKTIVITAS TERKINI','Latest transactions':'Transaksi terbaru','Date':'Tanggal','Description':'Deskripsi','Account':'Akun','Amount':'Nominal','PORTFOLIO':'PORTOFOLIO','Project profitability':'Profitabilitas proyek','Open projects':'Buka proyek','margin':'margin','No projects':'Belum ada proyek','No records found':'Tidak ada catatan','Add a record to start building your finance workspace.':'Tambahkan catatan untuk mulai membangun ruang kerja keuangan Anda.',
+      'Good morning, HMH.':'Selamat pagi, HMH.','Good afternoon, HMH.':'Selamat siang, HMH.','Good evening, HMH.':'Selamat malam, HMH.','Good night, HMH.':'Selamat malam, HMH.','Your finance cockpit is up to date. Monitor liquidity, profitability, and receivables from one place.':'Pusat kendali keuangan Anda sudah diperbarui. Pantau likuiditas, profitabilitas, dan piutang dari satu tempat.','New transaction':'Transaksi baru','Export CSV':'Ekspor CSV','Total Revenue':'Total Pendapatan','Operating Expenses':'Beban Operasional','Operating Profit':'Laba Operasional','Cash Balance':'Saldo Kas','Accounts Receivable':'Piutang Usaha','YTD':'YTD','Open invoices':'Faktur terbuka','Cost managed':'Biaya terkelola','Available liquidity':'Likuiditas tersedia','Outstanding':'Belum tertagih','YTD tracked':'Terpantau YTD','accounts':'akun','12-MONTH VIEW':'TAMPILAN 12 BULAN','Revenue performance':'Kinerja pendapatan','YTD revenue':'Pendapatan YTD','Revenue':'Pendapatan','Operating outflow':'Arus kas keluar operasional','(hover in Reports for detail)':'(lihat Laporan untuk detail)','SPEND MIX':'KOMPOSISI PENGELUARAN','Expense allocation':'Alokasi pengeluaran','No expenses':'Belum ada pengeluaran','Add your first expense to see allocation.':'Tambahkan pengeluaran pertama untuk melihat alokasinya.','RECENT ACTIVITY':'AKTIVITAS TERKINI','Latest transactions':'Transaksi terbaru','Date':'Tanggal','Description':'Deskripsi','Account':'Akun','Amount':'Nominal','PORTFOLIO':'PORTOFOLIO','Project profitability':'Profitabilitas proyek','Open projects':'Buka proyek','margin':'margin','No projects':'Belum ada proyek','No records found':'Tidak ada catatan','Add a record to start building your finance workspace.':'Tambahkan catatan untuk mulai membangun ruang kerja keuangan Anda.',
       'General ledger view of cash activity across company accounts.':'Tampilan buku besar aktivitas kas di seluruh akun perusahaan.','Add record':'Tambah catatan','Export':'Ekspor','Filter':'Filter','Search records...':'Cari catatan…','entries':'entri','General ledger':'Buku besar','Inflow':'Kas masuk','Outflow':'Kas keluar','Edit':'Edit','Delete':'Hapus',
       'Track revenue by client, service line, project, VAT, and collection status.':'Kelola pendapatan berdasarkan klien, lini layanan, proyek, pajak, dan status penagihan.','Add revenue':'Tambah pendapatan','Gross revenue':'Pendapatan bruto','Collected':'Tertagih','Open revenue':'Pendapatan terbuka','VAT recorded':'Pajak tercatat','REVENUE REGISTER':'DAFTAR PENDAPATAN','revenue records':'catatan pendapatan','Client / Project':'Klien / Proyek','Category':'Kategori','VAT':'Pajak','Status':'Status',
       'Monitor operational spend, direct costs, vendors, and payment status.':'Pantau pengeluaran operasional, biaya langsung, vendor, dan status pembayaran.','Add expense':'Tambah pengeluaran','Operating expenses':'Pengeluaran operasional','Direct costs':'Biaya langsung','Payroll':'Penggajian','Total cost':'Total biaya','EXPENSE REGISTER':'DAFTAR PENGELUARAN','expense records':'catatan pengeluaran','Vendor':'Vendor','Type':'Jenis','Direct cost':'Biaya langsung','Opex':'Opex',
@@ -191,6 +191,18 @@
     function t(value){ if(language!=='id'||value==null) return String(value??''); const s=String(value); return I18N_ID[s]||s; }
     function setLanguage(next){ if(!['id','en'].includes(next)) return; localStorage.setItem('hmh_language',next); window.location.reload(); }
     function updateLanguageControls(){ document.querySelectorAll('[data-language]').forEach(b=>{const active=b.dataset.language===language;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));}); }
+    function getGreetingKey(date=new Date()){
+      const hour=date.getHours();
+      if(hour<11) return 'Good morning, HMH.';
+      if(hour<15) return 'Good afternoon, HMH.';
+      if(hour<18) return 'Good evening, HMH.';
+      return 'Good night, HMH.';
+    }
+    function getGreetingText(){ return t(getGreetingKey(new Date())); }
+    function updateDashboardGreeting(){
+      const el=document.getElementById('dashboardGreeting');
+      if(el) el.textContent=getGreetingText();
+    }
     function translateDynamicText(s){
       if(language!=='id') return s;
       if(/^\d+ entries$/.test(s)) return s.replace(/^(\d+) entries$/,'$1 entri');
@@ -564,7 +576,7 @@ const firebaseConfig = {
       const colors=['#f3c744','#2f6fed','#4fb286','#db6b6b','#8a77e6'];
       return `
       <div class="hero-row">
-        <div><h2>Good evening, HMH.</h2><p>Your finance cockpit is up to date. Monitor liquidity, profitability, and receivables from one place.</p></div>
+        <div><h2 id="dashboardGreeting">${getGreetingText()}</h2><p>Your finance cockpit is up to date. Monitor liquidity, profitability, and receivables from one place.</p></div>
         <div class="hero-actions"><button class="btn btn-primary" data-action="quick-add">${ICON_PLUS}<span>New transaction</span></button><button class="btn btn-secondary" data-action="export-csv">${ICON_DOWNLOAD}<span>Export CSV</span></button></div>
       </div>
       <div class="kpi-grid">
@@ -882,6 +894,8 @@ const firebaseConfig = {
     document.getElementById('mobileNavBtn').innerHTML=ICON_MENU;
     updateInstallButton();
     updateLanguageControls();
+    updateDashboardGreeting();
+    setInterval(updateDashboardGreeting,60000);
     if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(err=>console.warn('Service worker registration failed:',err))); }
     initFirebase();
   
